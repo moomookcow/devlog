@@ -210,8 +210,8 @@ const HomePage: React.FC = () => {
                   whileHover={{ y: -5, scale: 1.02 }}
                   className="group"
                 >
-                  <Card className="h-full hover:shadow-lg transition-all duration-300">
-                    <CardHeader>
+                  <Card className="h-full hover:shadow-lg transition-all duration-300 flex flex-col">
+                    <CardHeader className="flex-shrink-0">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline">{post.category}</Badge>
                         {post.tags.slice(0, 2).map((tag) => (
@@ -224,15 +224,15 @@ const HomePage: React.FC = () => {
                           </Badge>
                         ))}
                       </div>
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2">
+                      <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
                         {post.title}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-4 line-clamp-3">
+                    <CardContent className="flex flex-col flex-grow">
+                      <p className="text-muted-foreground mb-4 line-clamp-3 flex-grow min-h-[4.5rem]">
                         {post.excerpt}
                       </p>
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <div className="flex items-center justify-between text-sm text-muted-foreground flex-shrink-0">
                         <div className="flex items-center gap-4">
                           <span>{post.publishedAt}</span>
                           <span>•</span>
