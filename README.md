@@ -41,7 +41,7 @@
 - **컴포넌트**: `HomePage`, `FeaturedPost`, `PostGrid`, `CategoryFilter`
 - **특징**: 반응형 그리드 레이아웃, 무한 스크롤, 검색 기능
 
-### 2. **블로그 목록** (`/blog`) - [ ] 미완료
+### 2. **블로그 목록** (`/blog`) - [x] 완료
 
 - **기능**: 모든 포스트 목록, 필터링, 정렬, 페이지네이션
 - **컴포넌트**: `BlogListPage`, `PostCard`, `FilterSidebar`, `Pagination`
@@ -71,19 +71,19 @@
 - **컴포넌트**: `SearchPage`, `SearchBar`, `SearchResults`
 - **특징**: 실시간 검색, 검색 히스토리, 검색 필터
 
-### 7. **소개 페이지** (`/about`) - [ ] 미완료
+### 7. **소개 페이지** (`/about`) - [x] 완료
 
 - **기능**: 개발자 소개, 기술 스택, 경력
 - **컴포넌트**: `AboutPage`, `ProfileCard`, `SkillList`, `Timeline`
 - **특징**: 개인 정보, 기술 스택 시각화, 경력 타임라인
 
-### 8. **연락처 페이지** (`/contact`) - [ ] 미완료
+### 8. **연락처 페이지** (`/contact`) - [x] 완료
 
 - **기능**: 연락처 정보, 문의 폼
 - **컴포넌트**: `ContactPage`, `ContactForm`, `SocialLinks`
 - **특징**: 문의 폼, 소셜 링크, 연락처 정보
 
-### 9. **404 페이지** (`/404`) - [ ] 미완료
+### 9. **404 페이지** (`/404`) - [x] 완료
 
 - **기능**: 페이지를 찾을 수 없음
 - **컴포넌트**: `NotFoundPage`, `ErrorBoundary`
@@ -150,14 +150,14 @@
 ### 페이지 컴포넌트 - [ ] 미완료
 
 - [x] `HomePage.tsx` - 홈페이지
-- [ ] `BlogListPage.tsx` - 블로그 목록
+- [x] `BlogListPage.tsx` - 블로그 목록
 - [ ] `PostDetailPage.tsx` - 포스트 상세
 - [ ] `CategoryPage.tsx` - 카테고리 페이지
 - [ ] `TagPage.tsx` - 태그 페이지
 - [ ] `SearchPage.tsx` - 검색 페이지
-- [ ] `AboutPage.tsx` - 소개 페이지
-- [ ] `ContactPage.tsx` - 연락처 페이지
-- [ ] `NotFoundPage.tsx` - 404 페이지
+- [x] `AboutPage.tsx` - 소개 페이지
+- [x] `ContactPage.tsx` - 연락처 페이지
+- [x] `NotFoundPage.tsx` - 404 페이지
 
 ### 커스텀 훅 - [ ] 미완료
 
@@ -193,21 +193,23 @@
 - [x] HomePage 컴포넌트 구현
 - [x] Layout 컴포넌트 구현 (Header, Footer, Sidebar)
 - [x] ThemeToggle 컴포넌트 구현
+- [x] React Router 설정 및 라우팅 구현
+- [x] 기본 페이지들 구현 (BlogList, About, Contact, 404)
 
 ### 🚧 진행 중인 작업
 
-- [ ] 라우팅 설정 (React Router)
+- [ ] BlogCard 컴포넌트 구현
 
 ### 📋 다음 작업 예정
 
-- [ ] HomePage 구현
-- [ ] BlogCard 컴포넌트 구현
+- [ ] PostDetailPage 구현
 - [ ] MDX 설정
 - [ ] 검색 기능 구현
+- [ ] 카테고리/태그 페이지 구현
 
 ### 📈 전체 진행률
 
-**현재 진행률: 35%** (Layout 컴포넌트 완료)
+**현재 진행률: 50%** (라우팅 및 기본 페이지 완료)
 
 ---
 
