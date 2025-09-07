@@ -34,7 +34,7 @@ const ThemeToggle: React.FC = () => {
       variant="outline"
       size="sm"
       onClick={toggleTheme}
-      className="w-10 h-10 p-0"
+      className="w-10 h-10 p-0 flex items-center justify-center"
       aria-label="테마 전환"
     >
       {theme === "light" ? (
