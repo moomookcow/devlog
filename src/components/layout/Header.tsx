@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ThemeToggle from "@/components/common/ThemeToggle";
@@ -15,15 +16,16 @@ import {
   Twitter,
 } from "lucide-react";
 
-const Header: React.FC = () => {
+const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navigation = [
     { name: "홈", href: "/", icon: Home },
     { name: "블로그", href: "/blog", icon: BookOpen },
     { name: "소개", href: "/about", icon: User },
-    { name: "연락처", href: "/contact", icon: Mail },
+    { name: "방명록", href: "/guestbook", icon: Mail },
   ];
 
   const socialLinks = [
@@ -41,30 +43,37 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="flex items-center space-x-2"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <BookOpen className="h-5 w-5" />
-            </div>
-            <span className="text-xl font-bold text-foreground">Tech Blog</span>
-          </motion.div>
+          <Link to="/">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex items-center space-x-2"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <BookOpen className="h-5 w-5" />
+              </div>
+              <span className="text-xl font-bold text-foreground">
+                Tech Blog
+              </span>
+            </motion.div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {navigation.map((item) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <item.icon className="h-4 w-4" />
-                <span>{item.name}</span>
-              </motion.a>
+              <motion.div key={item.name}>
+                <Link
+                  to={item.href}
+                  className={`flex items-center space-x-1 text-sm font-medium transition-colors ${
+                    location.pathname === item.href
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.name}</span>
+                </Link>
+              </motion.div>
             ))}
           </nav>
 
@@ -74,22 +83,37 @@ const Header: React.FC = () => {
             <motion.div
               initial={false}
               animate={{ width: isSearchOpen ? 200 : 40 }}
-              transition={{ duration: 0.3 }}
-              className="relative"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="relative h-10"
             >
-              <Input
-                placeholder="검색..."
-                className="pr-10"
-                onFocus={() => setIsSearchOpen(true)}
-                onBlur={() => setIsSearchOpen(false)}
-              />
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-              >
-                <Search className="h-4 w-4 text-muted-foreground" />
-              </motion.button>
+              {isSearchOpen ? (
+                <Input
+                  placeholder="검색..."
+                  className="pr-10 h-10 w-full"
+                  onFocus={() => setIsSearchOpen(true)}
+                  onBlur={() => setIsSearchOpen(false)}
+                />
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full h-10 p-0 flex items-center justify-center"
+                  onClick={() => setIsSearchOpen(true)}
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
+              )}
+              {isSearchOpen && (
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 flex items-center justify-center hover:bg-muted/50 rounded transition-colors"
+                  onClick={() => setIsSearchOpen(false)}
+                >
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                </motion.button>
+              )}
             </motion.div>
 
             {/* Theme Toggle */}
@@ -123,16 +147,20 @@ const Header: React.FC = () => {
         >
           <div className="py-4 space-y-2 border-t">
             {navigation.map((item) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                whileHover={{ x: 5 }}
-                className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <item.icon className="h-4 w-4" />
-                <span>{item.name}</span>
-              </motion.a>
+              <motion.div key={item.name}>
+                <Link
+                  to={item.href}
+                  className={`flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                    location.pathname === item.href
+                      ? "text-foreground bg-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.name}</span>
+                </Link>
+              </motion.div>
             ))}
 
             {/* Social Links */}
