@@ -1,83 +1,75 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Calendar, Clock, Eye } from "lucide-react";
+import { getAllPosts } from "@/utils/posts";
+import type { Post } from "@/utils/mdx";
+import { ArrowRight, Calendar, Clock, Eye, BookOpen } from "lucide-react";
 
 const BlogListPage = () => {
   const navigate = useNavigate();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // 임시 데이터
-  const posts = [
-    {
-      id: "1",
-      title: "React Hooks 완전 정리: useState부터 커스텀 훅까지",
-      excerpt:
-        "React Hooks의 모든 것을 실무 예제와 함께 알아보는 완벽한 가이드입니다.",
-      category: "JavaScript",
-      tags: ["React", "Hooks", "JavaScript"],
-      publishedAt: "2024-01-15",
-      readingTime: 5,
-      viewCount: 1234,
-      slug: "react-hooks-complete-guide",
-    },
-    {
-      id: "2",
-      title: "TypeScript 제네릭 활용법",
-      excerpt: "재사용 가능한 타입을 만드는 TypeScript 제네릭의 모든 것",
-      category: "TypeScript",
-      tags: ["TypeScript", "Generic"],
-      publishedAt: "2024-01-14",
-      readingTime: 3,
-      viewCount: 856,
-      slug: "typescript-generics-guide",
-    },
-    {
-      id: "3",
-      title: "Next.js 14 새 기능들",
-      excerpt: "Next.js 14의 새로운 기능들과 개선사항을 살펴보세요",
-      category: "React",
-      tags: ["Next.js", "React", "SSR"],
-      publishedAt: "2024-01-13",
-      readingTime: 4,
-      viewCount: 692,
-      slug: "nextjs-14-new-features",
-    },
-    {
-      id: "4",
-      title: "웹 성능 최적화 가이드",
-      excerpt: "웹사이트의 성능을 향상시키는 실무 노하우",
-      category: "Performance",
-      tags: ["Performance", "Web", "Optimization"],
-      publishedAt: "2024-01-12",
-      readingTime: 6,
-      viewCount: 445,
-      slug: "web-performance-optimization",
-    },
-    {
-      id: "5",
-      title: "CSS Grid 완전 정복",
-      excerpt: "CSS Grid를 활용한 레이아웃 디자인 기법",
-      category: "CSS",
-      tags: ["CSS", "Grid", "Layout"],
-      publishedAt: "2024-01-11",
-      readingTime: 4,
-      viewCount: 378,
-      slug: "css-grid-complete-guide",
-    },
-    {
-      id: "6",
-      title: "JavaScript 비동기 처리 마스터",
-      excerpt: "Promise, async/await, 그리고 비동기 프로그래밍의 모든 것",
-      category: "JavaScript",
-      tags: ["JavaScript", "Async", "Promise"],
-      publishedAt: "2024-01-10",
-      readingTime: 7,
-      viewCount: 892,
-      slug: "javascript-async-master",
-    },
-  ];
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const allPosts = await getAllPosts();
+        setPosts(allPosts);
+      } catch (error) {
+        console.error("Error loading posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPosts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">포스트를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 포스트가 없는 경우
+  if (posts.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="mb-6">
+            <BookOpen className="h-24 w-24 text-muted-foreground/50 mx-auto mb-4" />
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              아직 포스트가 없습니다
+            </h1>
+            <p className="text-muted-foreground mb-6">
+              첫 번째 포스트를 작성해보세요!
+            </p>
+          </div>
+          <div className="space-y-4">
+            <Button size="lg" className="w-full" onClick={() => navigate("/")}>
+              홈으로 돌아가기
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full"
+              onClick={() => navigate("/about")}
+            >
+              소개 페이지 보기
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -102,7 +94,8 @@ const BlogListPage = () => {
                 총 {posts.length}개 포스트
               </Badge>
               <Badge variant="outline" className="text-sm">
-                {new Set(posts.map((post) => post.category)).size}개 카테고리
+                {new Set(posts.map((post) => post.metadata.category)).size}개
+                카테고리
               </Badge>
             </div>
           </div>
@@ -120,7 +113,7 @@ const BlogListPage = () => {
           >
             {posts.map((post, index) => (
               <motion.div
-                key={post.id}
+                key={post.slug}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
@@ -130,8 +123,8 @@ const BlogListPage = () => {
                 <Card className="h-full hover:shadow-lg transition-all duration-300 flex flex-col">
                   <CardHeader className="flex-shrink-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="outline">{post.category}</Badge>
-                      {post.tags.slice(0, 2).map((tag) => (
+                      <Badge variant="outline">{post.metadata.category}</Badge>
+                      {post.metadata.tags.slice(0, 2).map((tag) => (
                         <Badge
                           key={tag}
                           variant="secondary"
@@ -142,27 +135,27 @@ const BlogListPage = () => {
                       ))}
                     </div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
-                      {post.title}
+                      {post.metadata.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex flex-col flex-grow">
                     <p className="text-muted-foreground mb-4 line-clamp-3 flex-grow min-h-[4.5rem]">
-                      {post.excerpt}
+                      {post.metadata.excerpt}
                     </p>
                     <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 flex-shrink-0">
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
-                          <span>{post.publishedAt}</span>
+                          <span>{post.metadata.publishedAt}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          <span>{post.readingTime}분</span>
+                          <span>{post.metadata.readingTime}분</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-1">
                         <Eye className="h-4 w-4" />
-                        <span>{post.viewCount}</span>
+                        <span>{post.metadata.viewCount}</span>
                       </div>
                     </div>
                     <Button
