@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllPosts } from "@/utils/posts";
 import type { Post } from "@/utils/mdx";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import {
-  ArrowRight,
-  Calendar,
-  Clock,
-  Eye,
   BookOpen,
   Filter,
   X,
+  Calendar,
+  Clock,
+  Eye,
+  ArrowRight,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const BlogListPage = () => {
   const navigate = useNavigate();
@@ -66,10 +67,7 @@ const BlogListPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">포스트를 불러오는 중...</p>
-        </div>
+        <LoadingSpinner size="lg" text="포스트를 불러오는 중..." />
       </div>
     );
   }

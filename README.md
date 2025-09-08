@@ -135,17 +135,18 @@
 - [x] `Sidebar.tsx` - 사이드바
 - [x] `Layout.tsx` - 전체 레이아웃
 
-#### Blog 컴포넌트 - [ ] 미완료
+#### Blog 컴포넌트 - [x] 완료
 
-- [ ] `BlogCard.tsx` - 블로그 카드
-- [ ] `PostList.tsx` - 포스트 목록
-- [ ] `SearchBar.tsx` - 검색바
-- [ ] `CategoryFilter.tsx` - 카테고리 필터
+- [x] `BlogCard.tsx` - 블로그 카드
+- [x] `PostList.tsx` - 포스트 목록
+- [x] `PageHeader.tsx` - 페이지 헤더
+- [x] `CategoryFilter.tsx` - 카테고리 필터
 
-#### Common 컴포넌트 - [ ] 미완료
+#### Common 컴포넌트 - [x] 완료
 
 - [x] `ThemeToggle.tsx` - 테마 토글
-- [ ] `LoadingSpinner.tsx` - 로딩 스피너
+- [x] `LoadingSpinner.tsx` - 로딩 스피너
+- [x] `CategoryModal.tsx` - 카테고리 선택 모달
 
 ### 페이지 컴포넌트 - [ ] 미완료
 
@@ -200,17 +201,17 @@
 - [x] Firebase 에러 처리 및 하이브리드 시스템
 - [x] 검색 기능 구현 (SearchPage, SearchBar, SearchResults, useSearch 훅)
 - [x] 카테고리 페이지 구현 (CategoryPage, 카테고리별 포스트 필터링)
+- [x] Blog 컴포넌트들 구현 (BlogCard, PostList, PageHeader, CategoryFilter)
+- [x] 공통 컴포넌트 구현 (LoadingSpinner, CategoryModal)
 
 ### 🚧 진행 중인 작업
 
-- [ ] Blog 컴포넌트들 구현
+- [ ] 커스텀 훅 구현
 
 ### 📋 다음 작업 예정
 
 - [ ] 태그 페이지 구현 (나중에)
-- [ ] Blog 컴포넌트들 구현 (BlogCard, PostList, CategoryFilter)
 - [ ] 커스텀 훅 구현 (useTheme, usePosts)
-- [ ] 공통 컴포넌트 구현 (LoadingSpinner)
 - [ ] 전역 스타일 설정
 
 ### 🔥 Firebase 연결 완료 필요
@@ -224,7 +225,7 @@
 
 ### 📈 전체 진행률
 
-**현재 진행률: 85%** (카테고리 페이지 및 핵심 기능 완료)
+**현재 진행률: 90%** (Blog 컴포넌트 및 코드 재사용성 향상 완료)
 
 ---
 

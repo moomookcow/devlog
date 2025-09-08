@@ -1,12 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { getAllPosts } from "@/utils/posts";
 import type { Post } from "@/utils/mdx";
 import CategoryModal from "@/components/common/CategoryModal";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import PostList from "@/components/blog/PostList";
 import {
   Search,
   BookOpen,
@@ -58,10 +60,7 @@ const HomePage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">포스트를 불러오는 중...</p>
-        </div>
+        <LoadingSpinner size="lg" text="포스트를 불러오는 중..." />
       </div>
     );
   }
@@ -264,56 +263,15 @@ const HomePage: React.FC = () => {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recentPosts.map((post, index) => (
-                  <motion.div
-                    key={post.slug}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                    whileHover={{ y: -5, scale: 1.02 }}
-                    className="group"
-                  >
-                    <Card
-                      className="h-full hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer"
-                      onClick={() => navigate(`/blog/${post.slug}`)}
-                    >
-                      <CardHeader className="flex-shrink-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="outline">
-                            {post.metadata.category}
-                          </Badge>
-                          {post.metadata.tags.slice(0, 2).map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="secondary"
-                              className="text-xs"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
-                          {post.metadata.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="flex flex-col flex-grow">
-                        <p className="text-muted-foreground mb-4 line-clamp-3 flex-grow min-h-[4.5rem]">
-                          {post.metadata.excerpt}
-                        </p>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground flex-shrink-0">
-                          <div className="flex items-center gap-4">
-                            <span>{post.metadata.publishedAt}</span>
-                            <span>•</span>
-                            <span>{post.metadata.readingTime}분</span>
-                          </div>
-                          <span>{post.metadata.viewCount} 조회</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
+              <PostList
+                posts={recentPosts}
+                variant="default"
+                showTags={true}
+                maxTags={2}
+                onTagClick={(tag) =>
+                  navigate(`/tag/${encodeURIComponent(tag)}`)
+                }
+              />
             </motion.div>
           </div>
         </section>
