@@ -1,0 +1,251 @@
+---
+title: "웹 성능 최적화 완벽 가이드"
+excerpt: "웹 애플리케이션의 성능을 극대화하는 실무 중심의 최적화 기법들을 소개합니다."
+author: "moomookcow"
+publishedAt: "2024-01-20"
+readingTime: 12
+viewCount: 2156
+likes: 156
+comments: 23
+category: "Performance"
+tags: ["Performance", "Web", "Optimization", "JavaScript", "CSS"]
+isPublished: true
+---
+
+# 웹 성능 최적화 완벽 가이드
+
+![Web Performance](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&crop=center)
+
+웹 성능 최적화는 사용자 경험을 향상시키고 비즈니스 성과를 개선하는 핵심 요소입니다. 이 가이드에서는 실무에서 바로 적용할 수 있는 성능 최적화 기법들을 단계별로 알아보겠습니다.
+
+## 1. 이미지 최적화
+
+![Image Optimization](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=300&fit=crop&crop=center)
+
+이미지는 웹 페이지의 대부분의 용량을 차지하므로, 이미지 최적화는 성능 개선의 핵심입니다.
+
+### WebP 형식 사용
+
+```html
+<picture>
+  <source srcset="image.webp" type="image/webp" />
+  <img src="image.jpg" alt="Description" />
+</picture>
+```
+
+### 지연 로딩 (Lazy Loading)
+
+```html
+<img src="image.jpg" alt="Description" loading="lazy" />
+```
+
+### 반응형 이미지
+
+```html
+<img
+  src="image-320w.jpg"
+  srcset="image-320w.jpg 320w, image-640w.jpg 640w, image-1280w.jpg 1280w"
+  sizes="(max-width: 320px) 280px, (max-width: 640px) 600px, 1200px"
+  alt="Description"
+/>
+```
+
+## 2. JavaScript 최적화
+
+![JavaScript Optimization](https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=600&h=300&fit=crop&crop=center)
+
+JavaScript는 웹 애플리케이션의 핵심이지만, 잘못 사용하면 성능 저하의 주요 원인이 됩니다.
+
+### 코드 스플리팅
+
+```javascript
+// 동적 임포트를 사용한 코드 스플리팅
+const LazyComponent = React.lazy(() => import("./LazyComponent"));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+
+### 번들 최적화
+
+```javascript
+// webpack.config.js
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
+  },
+};
+```
+
+## 3. CSS 최적화
+
+![CSS Optimization](https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=300&fit=crop&crop=center)
+
+CSS는 렌더링 성능에 직접적인 영향을 미치므로 최적화가 중요합니다.
+
+### Critical CSS 인라인화
+
+```html
+<head>
+  <style>
+    /* Critical CSS */
+    .header {
+      display: flex;
+    }
+    .main {
+      width: 100%;
+    }
+  </style>
+  <link
+    rel="preload"
+    href="styles.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+</head>
+```
+
+### CSS 압축
+
+```bash
+# CSS 압축 도구 사용
+npm install -g clean-css-cli
+cleancss -o styles.min.css styles.css
+```
+
+## 4. 네트워크 최적화
+
+![Network Optimization](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=300&fit=crop&crop=center)
+
+네트워크 요청을 최적화하면 페이지 로딩 시간을 크게 단축할 수 있습니다.
+
+### HTTP/2 활용
+
+```javascript
+// HTTP/2 서버 푸시
+app.get("/", (req, res) => {
+  res.writeHead(200, {
+    Link: "</styles.css>; rel=preload; as=style, </script.js>; rel=preload; as=script",
+  });
+  res.end(html);
+});
+```
+
+### 캐싱 전략
+
+```javascript
+// Service Worker를 사용한 캐싱
+self.addEventListener("fetch", (event) => {
+  if (event.request.destination === "image") {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  }
+});
+```
+
+## 5. Core Web Vitals 최적화
+
+![Core Web Vitals](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=300&fit=crop&crop=center)
+
+Google의 Core Web Vitals는 사용자 경험을 측정하는 중요한 지표입니다.
+
+### LCP (Largest Contentful Paint) 개선
+
+```javascript
+// LCP 요소 최적화
+const lcpElement = document.querySelector(".hero-image");
+if (lcpElement) {
+  lcpElement.style.contentVisibility = "auto";
+}
+```
+
+### CLS (Cumulative Layout Shift) 방지
+
+```css
+/* 이미지 크기 미리 지정 */
+.image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* 폰트 로딩 최적화 */
+@font-face {
+  font-family: "CustomFont";
+  src: url("font.woff2") format("woff2");
+  font-display: swap;
+}
+```
+
+### FID (First Input Delay) 개선
+
+```javascript
+// 메인 스레드 블로킹 방지
+const heavyTask = () => {
+  // 무거운 작업을 웹 워커로 이동
+  const worker = new Worker("heavy-task.js");
+  worker.postMessage(data);
+};
+```
+
+## 6. 모니터링 및 측정
+
+![Performance Monitoring](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=300&fit=crop&crop=center)
+
+성능 최적화의 효과를 측정하고 지속적으로 모니터링해야 합니다.
+
+### Performance API 활용
+
+```javascript
+// 성능 측정
+const observer = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    console.log(`${entry.name}: ${entry.duration}ms`);
+  }
+});
+
+observer.observe({ entryTypes: ["measure", "navigation"] });
+```
+
+### 실시간 모니터링
+
+```javascript
+// Web Vitals 측정
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
+
+getCLS(console.log);
+getFID(console.log);
+getFCP(console.log);
+getLCP(console.log);
+getTTFB(console.log);
+```
+
+## 결론
+
+![Conclusion](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=300&fit=crop&crop=center)
+
+웹 성능 최적화는 한 번에 끝나는 작업이 아닙니다. 지속적인 모니터링과 개선을 통해 사용자 경험을 향상시키고 비즈니스 성과를 개선할 수 있습니다. 위에서 소개한 기법들을 단계적으로 적용해보세요!
+
+## 참고 자료
+
+- [Web.dev Performance](https://web.dev/performance/)
+- [Google PageSpeed Insights](https://pagespeed.web.dev/)
+- [Web Vitals](https://web.dev/vitals/)
+- [MDN Performance](https://developer.mozilla.org/en-US/docs/Web/Performance)

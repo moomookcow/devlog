@@ -1,13 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import Layout from "@/components/layout/Layout";
-import HomePage from "./pages/HomePage";
-import BlogListPage from "./pages/BlogListPage";
-import PostDetailPage from "./pages/PostDetailPage";
-import SearchPage from "./pages/SearchPage";
-import AboutPage from "./pages/AboutPage";
-import GuestbookPage from "./pages/GuestbookPage";
-import CategoryPage from "./pages/CategoryPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import { PageLoadingFallback } from "@/components/common/LazyComponent";
+
+// Lazy load pages for code splitting
+const HomePage = lazy(() => import("./pages/HomePage"));
+const BlogListPage = lazy(() => import("./pages/BlogListPage"));
+const PostDetailPage = lazy(() => import("./pages/PostDetailPage"));
+const SearchPage = lazy(() => import("./pages/SearchPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const GuestbookPage = lazy(() => import("./pages/GuestbookPage"));
+const CategoryPage = lazy(() => import("./pages/CategoryPage"));
+const ImageTestPage = lazy(() => import("./pages/ImageTestPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
   return (
@@ -17,7 +22,9 @@ function App() {
           path="/"
           element={
             <Layout showSidebar={false}>
-              <HomePage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <HomePage />
+              </Suspense>
             </Layout>
           }
         />
@@ -25,7 +32,9 @@ function App() {
           path="/blog"
           element={
             <Layout showSidebar={true}>
-              <BlogListPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <BlogListPage />
+              </Suspense>
             </Layout>
           }
         />
@@ -33,7 +42,9 @@ function App() {
           path="/blog/:slug"
           element={
             <Layout showSidebar={false}>
-              <PostDetailPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <PostDetailPage />
+              </Suspense>
             </Layout>
           }
         />
@@ -41,7 +52,9 @@ function App() {
           path="/search"
           element={
             <Layout showSidebar={false}>
-              <SearchPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <SearchPage />
+              </Suspense>
             </Layout>
           }
         />
@@ -49,7 +62,9 @@ function App() {
           path="/category/:category"
           element={
             <Layout showSidebar={false}>
-              <CategoryPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <CategoryPage />
+              </Suspense>
             </Layout>
           }
         />
@@ -57,7 +72,9 @@ function App() {
           path="/about"
           element={
             <Layout showSidebar={false}>
-              <AboutPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <AboutPage />
+              </Suspense>
             </Layout>
           }
         />
@@ -65,7 +82,19 @@ function App() {
           path="/guestbook"
           element={
             <Layout showSidebar={false}>
-              <GuestbookPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <GuestbookPage />
+              </Suspense>
+            </Layout>
+          }
+        />
+        <Route
+          path="/image-test"
+          element={
+            <Layout showSidebar={false}>
+              <Suspense fallback={<PageLoadingFallback />}>
+                <ImageTestPage />
+              </Suspense>
             </Layout>
           }
         />
@@ -73,7 +102,9 @@ function App() {
           path="*"
           element={
             <Layout showSidebar={false}>
-              <NotFoundPage />
+              <Suspense fallback={<PageLoadingFallback />}>
+                <NotFoundPage />
+              </Suspense>
             </Layout>
           }
         />

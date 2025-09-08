@@ -1,0 +1,336 @@
+---
+title: "CSS Grid 완전 정리: 레이아웃의 새로운 패러다임"
+excerpt: "CSS Grid의 모든 기능을 실무 예제와 함께 마스터하는 완벽한 가이드입니다."
+author: "moomookcow"
+publishedAt: "2024-01-25"
+readingTime: 10
+viewCount: 1890
+likes: 134
+comments: 18
+category: "CSS"
+tags: ["CSS", "Grid", "Layout", "Frontend", "Web Design"]
+isPublished: true
+---
+
+# CSS Grid 완전 정리: 레이아웃의 새로운 패러다임
+
+![CSS Grid](https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=400&fit=crop&crop=center)
+
+CSS Grid는 2차원 레이아웃을 위한 강력한 도구입니다. Flexbox가 1차원 레이아웃에 특화되어 있다면, Grid는 행과 열을 동시에 제어할 수 있어 복잡한 레이아웃을 쉽게 만들 수 있습니다.
+
+## 1. Grid 기본 개념
+
+![Grid Basics](https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=300&fit=crop&crop=center)
+
+Grid는 격자 형태의 레이아웃 시스템으로, 다음과 같은 핵심 개념들을 이해해야 합니다.
+
+### Grid Container와 Grid Items
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 100px 200px;
+  gap: 20px;
+}
+
+.grid-item {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+```
+
+### Grid Lines와 Grid Tracks
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: [start] 1fr [middle] 2fr [end];
+  grid-template-rows: [top] 100px [center] 200px [bottom];
+}
+```
+
+## 2. Grid Template 속성들
+
+![Grid Templates](https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=600&h=300&fit=crop&crop=center)
+
+Grid의 레이아웃을 정의하는 핵심 속성들을 알아보겠습니다.
+
+### grid-template-columns
+
+```css
+/* 고정 크기 */
+.grid-container {
+  grid-template-columns: 200px 200px 200px;
+}
+
+/* 비율 기반 */
+.grid-container {
+  grid-template-columns: 1fr 2fr 1fr;
+}
+
+/* 반복 함수 */
+.grid-container {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* 자동 크기 조정 */
+.grid-container {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+```
+
+### grid-template-rows
+
+```css
+.grid-container {
+  grid-template-rows: 100px 200px 100px;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: auto 1fr auto; /* 헤더, 메인, 푸터 */
+}
+```
+
+### grid-template-areas
+
+```css
+.grid-container {
+  grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+}
+
+.header {
+  grid-area: header;
+}
+.sidebar {
+  grid-area: sidebar;
+}
+.main {
+  grid-area: main;
+}
+.footer {
+  grid-area: footer;
+}
+```
+
+## 3. Grid Item 배치
+
+![Grid Item Placement](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=300&fit=crop&crop=center)
+
+Grid Item을 원하는 위치에 배치하는 방법을 알아보겠습니다.
+
+### grid-column과 grid-row
+
+```css
+.grid-item {
+  grid-column: 1 / 3; /* 1번 라인부터 3번 라인까지 */
+  grid-row: 2 / 4; /* 2번 라인부터 4번 라인까지 */
+}
+
+/* span 키워드 사용 */
+.grid-item {
+  grid-column: 1 / span 2; /* 1번 라인부터 2칸 */
+  grid-row: 2 / span 1; /* 2번 라인부터 1칸 */
+}
+```
+
+### grid-area
+
+```css
+.grid-item {
+  grid-area: 2 / 1 / 4 / 3; /* row-start / col-start / row-end / col-end */
+}
+```
+
+## 4. 반응형 Grid 레이아웃
+
+![Responsive Grid](https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=300&fit=crop&crop=center)
+
+반응형 웹 디자인에서 Grid를 활용하는 방법을 알아보겠습니다.
+
+### auto-fit과 auto-fill
+
+```css
+/* auto-fit: 빈 공간을 채움 */
+.grid-container {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* auto-fill: 빈 공간을 유지 */
+.grid-container {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+```
+
+### 미디어 쿼리와 함께 사용
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
+
+## 5. 실무 예제: 카드 레이아웃
+
+![Card Layout](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=300&fit=crop&crop=center)
+
+실제 프로젝트에서 자주 사용되는 카드 레이아웃을 Grid로 구현해보겠습니다.
+
+### 기본 카드 그리드
+
+```css
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+```
+
+### 피처드 카드 레이아웃
+
+```css
+.featured-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+  height: 400px;
+}
+
+.featured-card {
+  grid-row: 1 / -1; /* 전체 높이 사용 */
+}
+
+.small-card {
+  grid-column: 2 / -1; /* 2번째 열부터 끝까지 */
+}
+```
+
+## 6. 고급 Grid 기법
+
+![Advanced Grid](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=300&fit=crop&crop=center)
+
+Grid의 고급 기능들을 활용한 복잡한 레이아웃을 만들어보겠습니다.
+
+### 겹치는 요소
+
+```css
+.overlay-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.overlay-item {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  z-index: 1;
+}
+
+.overlay-content {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+### 비대칭 레이아웃
+
+```css
+.asymmetric-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer";
+  min-height: 100vh;
+}
+```
+
+## 7. Grid와 Flexbox 조합
+
+![Grid + Flexbox](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=300&fit=crop&crop=center)
+
+Grid와 Flexbox를 함께 사용하면 더욱 강력한 레이아웃을 만들 수 있습니다.
+
+### Grid Container + Flexbox Items
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+}
+```
+
+### Flexbox Container + Grid Items
+
+```css
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flex-item {
+  flex: 1 1 300px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 1rem;
+}
+```
+
+## 결론
+
+![Conclusion](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=300&fit=crop&crop=center)
+
+CSS Grid는 현대 웹 개발에서 필수적인 레이아웃 도구입니다. 2차원 레이아웃을 쉽게 만들 수 있고, 반응형 디자인과도 완벽하게 호환됩니다. Flexbox와 함께 사용하면 거의 모든 레이아웃 요구사항을 충족할 수 있습니다.
+
+## 참고 자료
+
+- [CSS Grid Guide](https://css-tricks.com/snippets/css/complete-guide-grid/)
+- [Grid by Example](https://gridbyexample.com/)
+- [MDN CSS Grid](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout)
+- [A Complete Guide to CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
