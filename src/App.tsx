@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import BlogListPage from "./pages/BlogListPage";
+import PostDetailPage from "./pages/PostDetailPage";
 import AboutPage from "./pages/AboutPage";
 import GuestbookPage from "./pages/GuestbookPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -23,6 +24,14 @@ function App() {
           element={
             <Layout showSidebar={true}>
               <BlogListPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <Layout showSidebar={false}>
+              <PostDetailPage />
             </Layout>
           }
         />
