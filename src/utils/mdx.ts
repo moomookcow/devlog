@@ -10,12 +10,29 @@ export interface PostMetadata {
   category: string;
   tags: string[];
   isPublished: boolean;
+  firebaseId?: string; // Firebase 문서 ID (상호작용용)
 }
 
 export interface Post {
   slug: string;
   metadata: PostMetadata;
   content: string;
+}
+
+// Firebase 상호작용 데이터
+export interface PostStats {
+  firebaseId: string;
+  viewCount: number;
+  likes: number;
+  comments: Comment[];
+}
+
+export interface Comment {
+  id: string;
+  author: string;
+  content: string;
+  createdAt: string;
+  isApproved: boolean;
 }
 
 // 클라이언트 사이드에서 사용할 수 있는 간단한 버전
