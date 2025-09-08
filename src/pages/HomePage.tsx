@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getAllPosts } from "@/utils/posts";
-import type { Post } from "@/utils/mdx";
 import CategoryModal from "@/components/common/CategoryModal";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import PostList from "@/components/blog/PostList";
+import { usePosts } from "@/hooks/usePosts";
 import {
   Search,
   BookOpen,
@@ -18,49 +17,39 @@ import {
   Eye,
 } from "lucide-react";
 
-// 동적 포스트 로딩을 위한 상태
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const [featuredPost, setFeaturedPost] = React.useState<Post | null>(null);
-  const [recentPosts, setRecentPosts] = React.useState<Post[]>([]);
-  const [categories, setCategories] = React.useState<string[]>([]);
-  const [allPosts, setAllPosts] = React.useState<Post[]>([]);
-  const [loading, setLoading] = React.useState(true);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const allPosts = await getAllPosts();
+  // usePosts 훅 사용
+  const {
+    posts: allPosts,
+    loading,
+    error,
+    getFeaturedPost,
+    getRecentPosts,
+    categories,
+  } = usePosts();
 
-        // 첫 번째 포스트를 추천 포스트로 설정
-        if (allPosts.length > 0) {
-          setFeaturedPost(allPosts[0]);
-        }
-
-        // 최근 포스트 5개 설정
-        setRecentPosts(allPosts.slice(0, 5));
-
-        // 카테고리 목록 설정
-        const categoryList = Array.from(
-          new Set(allPosts.map((post) => post.metadata.category))
-        ).sort();
-        setCategories(categoryList);
-        setAllPosts(allPosts);
-      } catch (error) {
-        console.error("Error loading posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPosts();
-  }, []);
+  const featuredPost = getFeaturedPost();
+  const recentPosts = getRecentPosts(5);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <LoadingSpinner size="lg" text="포스트를 불러오는 중..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">오류가 발생했습니다</h1>
+          <p className="text-muted-foreground mb-6">{error}</p>
+          <Button onClick={() => window.location.reload()}>다시 시도</Button>
+        </div>
       </div>
     );
   }

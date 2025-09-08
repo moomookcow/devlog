@@ -1,32 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Monitor } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 
 const ThemeToggle: React.FC = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme, resolvedTheme, toggleTheme } = useTheme();
 
-  useEffect(() => {
-    // 로컬 스토리지에서 테마 설정 불러오기
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle("dark", savedTheme === "dark");
-    } else {
-      // 시스템 테마 감지
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      const systemTheme = prefersDark ? "dark" : "light";
-      setTheme(systemTheme);
-      document.documentElement.classList.toggle("dark", systemTheme === "dark");
+  const getIcon = () => {
+    if (theme === "system") {
+      return <Monitor className="h-4 w-4" />;
     }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    return resolvedTheme === "light" ? (
+      <Moon className="h-4 w-4" />
+    ) : (
+      <Sun className="h-4 w-4" />
+    );
   };
 
   return (
@@ -35,13 +23,12 @@ const ThemeToggle: React.FC = () => {
       size="sm"
       onClick={toggleTheme}
       className="w-10 h-10 p-0 flex items-center justify-center"
-      aria-label="테마 전환"
+      aria-label={`테마 전환 (현재: ${theme})`}
+      title={`현재 테마: ${
+        theme === "system" ? "시스템" : theme === "light" ? "라이트" : "다크"
+      }`}
     >
-      {theme === "light" ? (
-        <Moon className="h-4 w-4" />
-      ) : (
-        <Sun className="h-4 w-4" />
-      )}
+      {getIcon()}
     </Button>
   );
 };
