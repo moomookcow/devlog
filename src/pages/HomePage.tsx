@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -72,6 +73,7 @@ const categories = [
 ];
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -174,7 +176,10 @@ const HomePage: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <Button className="group-hover:bg-primary/90 transition-colors">
+                    <Button
+                      className="group-hover:bg-primary/90 transition-colors"
+                      onClick={() => navigate(`/blog/${featuredPost.slug}`)}
+                    >
                       읽어보기
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
@@ -210,7 +215,10 @@ const HomePage: React.FC = () => {
                   whileHover={{ y: -5, scale: 1.02 }}
                   className="group"
                 >
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 flex flex-col">
+                  <Card
+                    className="h-full hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer"
+                    onClick={() => navigate(`/blog/${post.slug}`)}
+                  >
                     <CardHeader className="flex-shrink-0">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline">{post.category}</Badge>

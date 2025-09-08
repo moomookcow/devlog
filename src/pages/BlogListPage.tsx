@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Calendar, Clock, Eye } from "lucide-react";
 
 const BlogListPage = () => {
+  const navigate = useNavigate();
+
   // 임시 데이터
   const posts = [
     {
@@ -162,7 +165,10 @@ const BlogListPage = () => {
                         <span>{post.viewCount}</span>
                       </div>
                     </div>
-                    <Button className="w-full group-hover:bg-primary/90 transition-colors flex-shrink-0">
+                    <Button
+                      className="w-full group-hover:bg-primary/90 transition-colors flex-shrink-0"
+                      onClick={() => navigate(`/blog/${post.slug}`)}
+                    >
                       읽어보기
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>

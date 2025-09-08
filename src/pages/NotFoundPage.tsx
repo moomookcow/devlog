@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +18,7 @@ import {
 } from "lucide-react";
 
 const NotFoundPage = () => {
+  const navigate = useNavigate();
   const errorMessages = [
     "undefined is not a function",
     "Cannot read property 'page' of undefined",
@@ -138,7 +140,7 @@ const NotFoundPage = () => {
                   Go Back
                 </Button>
                 <Button
-                  onClick={() => (window.location.href = "/")}
+                  onClick={() => navigate("/")}
                   className="flex items-center gap-2"
                 >
                   <Home className="h-4 w-4" />
@@ -154,7 +156,7 @@ const NotFoundPage = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => (window.location.href = "/blog")}
+                    onClick={() => navigate("/blog")}
                     className="flex flex-col items-center gap-1 h-auto py-3"
                   >
                     <BookOpen className="h-4 w-4" />
@@ -163,7 +165,7 @@ const NotFoundPage = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => (window.location.href = "/about")}
+                    onClick={() => navigate("/about")}
                     className="flex flex-col items-center gap-1 h-auto py-3"
                   >
                     <Search className="h-4 w-4" />
@@ -172,7 +174,7 @@ const NotFoundPage = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => (window.location.href = "/guestbook")}
+                    onClick={() => navigate("/guestbook")}
                     className="flex flex-col items-center gap-1 h-auto py-3"
                   >
                     <Zap className="h-4 w-4" />
