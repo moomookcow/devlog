@@ -108,10 +108,6 @@ export async function getAllPosts(): Promise<Post[]> {
   console.log("🚀 getAllPosts 함수가 호출되었습니다!");
 
   try {
-    // Vite의 import.meta.glob을 사용하여 MDX 파일들을 로드
-    // 여러 패턴을 정적으로 시도해보기
-    let postModules: Record<string, any> = {};
-
     // public 폴더의 MDX 파일들을 직접 fetch로 로드
     const mdxFiles = [
       "/content/posts/javascript/react-hooks-complete-guide.mdx",

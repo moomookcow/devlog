@@ -2,10 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import {
-  Search,
   Menu,
   X,
   Home,
@@ -17,7 +15,6 @@ import {
 } from "lucide-react";
 
 const Header = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -77,45 +74,8 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Search & Actions */}
+          {/* Actions */}
           <div className="flex items-center space-x-2">
-            {/* Search */}
-            <motion.div
-              initial={false}
-              animate={{ width: isSearchOpen ? 200 : 40 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="relative h-10"
-            >
-              {isSearchOpen ? (
-                <Input
-                  placeholder="검색..."
-                  className="pr-10 h-10 w-full"
-                  onFocus={() => setIsSearchOpen(true)}
-                  onBlur={() => setIsSearchOpen(false)}
-                />
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full h-10 p-0 flex items-center justify-center"
-                  onClick={() => setIsSearchOpen(true)}
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-              )}
-              {isSearchOpen && (
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.1 }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 flex items-center justify-center hover:bg-muted/50 rounded transition-colors"
-                  onClick={() => setIsSearchOpen(false)}
-                >
-                  <Search className="h-4 w-4 text-muted-foreground" />
-                </motion.button>
-              )}
-            </motion.div>
-
             {/* Theme Toggle */}
             <ThemeToggle />
 

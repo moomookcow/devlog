@@ -17,6 +17,7 @@ export interface Post {
   slug: string;
   metadata: PostMetadata;
   content: string;
+  categoryPath: string; // 카테고리 경로 (예: "javascript/react-hooks")
 }
 
 // Firebase 상호작용 데이터
@@ -134,6 +135,7 @@ function useApi<T>(url: string): UseApiResult<T> {
 ## 결론
 
 TypeScript와 React를 함께 사용하면 컴파일 타임에 오류를 잡을 수 있어 더 안전한 코드를 작성할 수 있습니다.`,
+      categoryPath: "react/react-typescript-best-practices",
     },
   ];
 }

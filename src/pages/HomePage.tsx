@@ -121,11 +121,20 @@ const HomePage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Button size="lg" className="text-lg px-8">
+              <Button
+                size="lg"
+                className="text-lg px-8"
+                onClick={() => navigate("/search")}
+              >
                 <Search className="mr-2 h-5 w-5" />
                 포스트 검색
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8">
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-lg px-8"
+                onClick={() => navigate("/blog")}
+              >
                 <BookOpen className="mr-2 h-5 w-5" />
                 카테고리 보기
               </Button>
@@ -239,7 +248,7 @@ const HomePage: React.FC = () => {
                 <h2 className="text-3xl font-bold text-foreground">
                   Recent Posts
                 </h2>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => navigate("/blog")}>
                   모든 포스트 보기
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
