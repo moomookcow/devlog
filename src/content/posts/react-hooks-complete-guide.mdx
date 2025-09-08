@@ -1,0 +1,534 @@
+---
+title: "React Hooks 완전 정리: useState부터 커스텀 훅까지"
+excerpt: "React Hooks의 모든 것을 실무 예제와 함께 알아보는 완벽한 가이드입니다."
+author: "moomookcow"
+publishedAt: "2024-01-15"
+readingTime: 5
+viewCount: 1234
+likes: 67
+comments: 8
+category: "JavaScript"
+tags: ["React", "Hooks", "JavaScript"]
+isPublished: true
+---
+
+# React Hooks 완전 정리: useState부터 커스텀 훅까지
+
+React Hooks는 함수형 컴포넌트에서 상태와 생명주기 기능을 사용할 수 있게 해주는 강력한 기능입니다. 이 글에서는 모든 Hooks를 실무 예제와 함께 자세히 알아보겠습니다.
+
+## 1. useState - 상태 관리의 기본
+
+`useState`는 함수형 컴포넌트에서 상태를 관리하는 가장 기본적인 Hook입니다.
+
+```typescript
+import React, { useState } from "react";
+
+interface CounterProps {
+  initialValue?: number;
+}
+
+const Counter: React.FC<CounterProps> = ({ initialValue = 0 }) => {
+  const [count, setCount] = useState<number>(initialValue);
+  const [isEven, setIsEven] = useState<boolean>(count % 2 === 0);
+
+  const increment = () => {
+    setCount((prev) => {
+      const newCount = prev + 1;
+      setIsEven(newCount % 2 === 0);
+      return newCount;
+    });
+  };
+
+  const decrement = () => {
+    setCount((prev) => {
+      const newCount = prev - 1;
+      setIsEven(newCount % 2 === 0);
+      return newCount;
+    });
+  };
+
+  return (
+    <div className="p-4 border rounded-lg">
+      <h2 className="text-xl font-bold mb-4">카운터: {count}</h2>
+      <p className="mb-4">숫자는 {isEven ? "짝수" : "홀수"}입니다.</p>
+      <div className="space-x-2">
+        <button
+          onClick={decrement}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        >
+          -1
+        </button>
+        <button
+          onClick={increment}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          +1
+        </button>
+      </div>
+    </div>
+  );
+};
+```
+
+## 2. useEffect - 사이드 이펙트 처리
+
+`useEffect`는 컴포넌트의 생명주기와 관련된 사이드 이펙트를 처리합니다.
+
+```typescript
+import React, { useState, useEffect } from "react";
+
+interface UserProfileProps {
+  userId: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(`/api/users/${userId}`);
+        if (!response.ok) {
+          throw new Error("사용자를 찾을 수 없습니다.");
+        }
+
+        const userData = await response.json();
+
+        if (isMounted) {
+          setUser(userData);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "알 수 없는 오류가 발생했습니다."
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUser();
+
+    // 클린업 함수
+    return () => {
+      isMounted = false;
+    };
+  }, [userId]); // userId가 변경될 때만 실행
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div className="text-red-500">오류: {error}</div>;
+  if (!user) return <div>사용자를 찾을 수 없습니다.</div>;
+
+  return (
+    <div className="p-4 border rounded-lg">
+      <h2 className="text-xl font-bold mb-4">{user.name}</h2>
+      <p className="text-gray-600">{user.email}</p>
+      {user.avatar && (
+        <img
+          src={user.avatar}
+          alt={user.name}
+          className="w-16 h-16 rounded-full mt-4"
+        />
+      )}
+    </div>
+  );
+};
+```
+
+## 3. useContext - 전역 상태 관리
+
+`useContext`는 React Context를 통해 전역 상태를 관리할 수 있게 해줍니다.
+
+```typescript
+import React, { createContext, useContext, useState, ReactNode } from "react";
+
+// Context 타입 정의
+interface ThemeContextType {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+// Context 생성
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+// Provider 컴포넌트
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+// 커스텀 Hook
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+};
+
+// 사용 예시
+const ThemeToggle: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className={`px-4 py-2 rounded ${
+        theme === "light" ? "bg-gray-800 text-white" : "bg-gray-200 text-black"
+      }`}
+    >
+      {theme === "light" ? "다크 모드" : "라이트 모드"}
+    </button>
+  );
+};
+```
+
+## 4. useReducer - 복잡한 상태 관리
+
+`useReducer`는 복잡한 상태 로직을 관리할 때 `useState`보다 더 적합합니다.
+
+```typescript
+import React, { useReducer } from "react";
+
+// 상태 타입 정의
+interface TodoState {
+  todos: Todo[];
+  filter: "all" | "active" | "completed";
+}
+
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+// 액션 타입 정의
+type TodoAction =
+  | { type: "ADD_TODO"; payload: string }
+  | { type: "TOGGLE_TODO"; payload: string }
+  | { type: "DELETE_TODO"; payload: string }
+  | { type: "SET_FILTER"; payload: "all" | "active" | "completed" };
+
+// 리듀서 함수
+const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
+  switch (action.type) {
+    case "ADD_TODO":
+      return {
+        ...state,
+        todos: [
+          ...state.todos,
+          {
+            id: Date.now().toString(),
+            text: action.payload,
+            completed: false,
+          },
+        ],
+      };
+    case "TOGGLE_TODO":
+      return {
+        ...state,
+        todos: state.todos.map((todo) =>
+          todo.id === action.payload
+            ? { ...todo, completed: !todo.completed }
+            : todo
+        ),
+      };
+    case "DELETE_TODO":
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== action.payload),
+      };
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+// 컴포넌트
+const TodoApp: React.FC = () => {
+  const [state, dispatch] = useReducer(todoReducer, {
+    todos: [],
+    filter: "all",
+  });
+
+  const [inputValue, setInputValue] = useState("");
+
+  const addTodo = () => {
+    if (inputValue.trim()) {
+      dispatch({ type: "ADD_TODO", payload: inputValue });
+      setInputValue("");
+    }
+  };
+
+  const filteredTodos = state.todos.filter((todo) => {
+    switch (state.filter) {
+      case "active":
+        return !todo.completed;
+      case "completed":
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">할 일 목록</h1>
+
+      <div className="mb-4 flex gap-2">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && addTodo()}
+          className="flex-1 px-3 py-2 border rounded"
+          placeholder="할 일을 입력하세요"
+        />
+        <button
+          onClick={addTodo}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          추가
+        </button>
+      </div>
+
+      <div className="mb-4 flex gap-2">
+        {(["all", "active", "completed"] as const).map((filter) => (
+          <button
+            key={filter}
+            onClick={() => dispatch({ type: "SET_FILTER", payload: filter })}
+            className={`px-3 py-1 rounded text-sm ${
+              state.filter === filter ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            {filter === "all"
+              ? "전체"
+              : filter === "active"
+              ? "진행중"
+              : "완료"}
+          </button>
+        ))}
+      </div>
+
+      <ul className="space-y-2">
+        {filteredTodos.map((todo) => (
+          <li
+            key={todo.id}
+            className={`flex items-center gap-2 p-2 border rounded ${
+              todo.completed ? "bg-gray-100" : ""
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() =>
+                dispatch({ type: "TOGGLE_TODO", payload: todo.id })
+              }
+            />
+            <span
+              className={`flex-1 ${
+                todo.completed ? "line-through text-gray-500" : ""
+              }`}
+            >
+              {todo.text}
+            </span>
+            <button
+              onClick={() =>
+                dispatch({ type: "DELETE_TODO", payload: todo.id })
+              }
+              className="text-red-500 hover:text-red-700"
+            >
+              삭제
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+```
+
+## 5. 커스텀 훅 만들기
+
+커스텀 훅을 만들어 로직을 재사용할 수 있습니다.
+
+```typescript
+import { useState, useEffect, useCallback } from "react";
+
+// API 호출을 위한 커스텀 훅
+interface UseApiResult<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  refetch: () => void;
+}
+
+function useApi<T>(url: string): UseApiResult<T> {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [url]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { data, loading, error, refetch: fetchData };
+}
+
+// 로컬 스토리지를 위한 커스텀 훅
+function useLocalStorage<T>(key: string, initialValue: T) {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(`Error reading localStorage key "${key}":`, error);
+      return initialValue;
+    }
+  });
+
+  const setValue = useCallback(
+    (value: T | ((val: T) => T)) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      } catch (error) {
+        console.error(`Error setting localStorage key "${key}":`, error);
+      }
+    },
+    [key, storedValue]
+  );
+
+  return [storedValue, setValue] as const;
+}
+
+// 사용 예시
+const UserList: React.FC = () => {
+  const { data: users, loading, error, refetch } = useApi<User[]>("/api/users");
+  const [favorites, setFavorites] = useLocalStorage<string[]>(
+    "favorite-users",
+    []
+  );
+
+  const toggleFavorite = (userId: string) => {
+    setFavorites((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div className="text-red-500">오류: {error}</div>;
+
+  return (
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">사용자 목록</h2>
+      <button
+        onClick={refetch}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        새로고침
+      </button>
+
+      <ul className="space-y-2">
+        {users?.map((user) => (
+          <li
+            key={user.id}
+            className="flex items-center justify-between p-2 border rounded"
+          >
+            <span>{user.name}</span>
+            <button
+              onClick={() => toggleFavorite(user.id)}
+              className={`px-3 py-1 rounded text-sm ${
+                favorites.includes(user.id)
+                  ? "bg-yellow-500 text-white"
+                  : "bg-gray-200"
+              }`}
+            >
+              {favorites.includes(user.id) ? "즐겨찾기 해제" : "즐겨찾기"}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+```
+
+## 결론
+
+React Hooks는 함수형 컴포넌트에서 상태와 생명주기를 관리하는 강력한 도구입니다. 각 Hook의 특성을 이해하고 적절히 활용하면 더 깔끔하고 재사용 가능한 코드를 작성할 수 있습니다.
+
+### 주요 포인트
+
+1. **useState**: 간단한 상태 관리
+2. **useEffect**: 사이드 이펙트 처리
+3. **useContext**: 전역 상태 관리
+4. **useReducer**: 복잡한 상태 로직
+5. **커스텀 훅**: 로직 재사용
+
+### 참고 자료
+
+- [React Hooks 공식 문서](https://react.dev/reference/react)
+- [React Hooks 패턴 모음](https://usehooks.com/)
+- [TypeScript와 함께하는 React Hooks](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/hooks/)
