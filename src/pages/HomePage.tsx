@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getAllPosts } from "@/utils/posts";
 import type { Post } from "@/utils/mdx";
+import CategoryModal from "@/components/common/CategoryModal";
 import {
   Search,
   BookOpen,
@@ -20,7 +21,10 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [featuredPost, setFeaturedPost] = React.useState<Post | null>(null);
   const [recentPosts, setRecentPosts] = React.useState<Post[]>([]);
+  const [categories, setCategories] = React.useState<string[]>([]);
+  const [allPosts, setAllPosts] = React.useState<Post[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     const loadPosts = async () => {
@@ -34,6 +38,13 @@ const HomePage: React.FC = () => {
 
         // 최근 포스트 5개 설정
         setRecentPosts(allPosts.slice(0, 5));
+
+        // 카테고리 목록 설정
+        const categoryList = Array.from(
+          new Set(allPosts.map((post) => post.metadata.category))
+        ).sort();
+        setCategories(categoryList);
+        setAllPosts(allPosts);
       } catch (error) {
         console.error("Error loading posts:", error);
       } finally {
@@ -133,7 +144,7 @@ const HomePage: React.FC = () => {
                 variant="outline"
                 size="lg"
                 className="text-lg px-8"
-                onClick={() => navigate("/blog")}
+                onClick={() => setIsCategoryModalOpen(true)}
               >
                 <BookOpen className="mr-2 h-5 w-5" />
                 카테고리 보기
@@ -307,6 +318,17 @@ const HomePage: React.FC = () => {
           </div>
         </section>
       )}
+
+      {/* Category Modal */}
+      <CategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+        categories={categories}
+        posts={allPosts}
+        onCategorySelect={(category) =>
+          navigate(`/category/${encodeURIComponent(category)}`)
+        }
+      />
     </div>
   );
 };

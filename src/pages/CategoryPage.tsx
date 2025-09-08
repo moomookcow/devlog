@@ -1,67 +1,41 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getAllPosts } from "@/utils/posts";
 import type { Post } from "@/utils/mdx";
-import {
-  ArrowRight,
-  Calendar,
-  Clock,
-  Eye,
-  BookOpen,
-  Filter,
-  X,
-} from "lucide-react";
+import { ArrowRight, Calendar, Clock, Eye, FolderOpen } from "lucide-react";
 
-const BlogListPage = () => {
+const CategoryPage: React.FC = () => {
+  const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadPosts = async () => {
+      if (!category) return;
+
       try {
+        setLoading(true);
         const allPosts = await getAllPosts();
-        setPosts(allPosts);
-        setFilteredPosts(allPosts);
+        const filtered = allPosts.filter(
+          (post) =>
+            post.metadata.category.toLowerCase() === category.toLowerCase()
+        );
+        setPosts(filtered);
       } catch (error) {
-        console.error("Error loading posts:", error);
+        console.error("Error loading posts for category:", category, error);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
     };
 
     loadPosts();
-  }, []);
-
-  // 카테고리 필터링
-  useEffect(() => {
-    if (selectedCategory) {
-      const filtered = posts.filter(
-        (post) =>
-          post.categoryPath.split("/")[0].toLowerCase() ===
-          selectedCategory.toLowerCase()
-      );
-      setFilteredPosts(filtered);
-    } else {
-      setFilteredPosts(posts);
-    }
-  }, [selectedCategory, posts]);
-
-  // 사용 가능한 카테고리 목록
-  const categories = Array.from(
-    new Set(posts.map((post) => post.categoryPath.split("/")[0]))
-  ).sort();
-
-  // 카테고리 필터 클리어
-  const clearCategoryFilter = () => {
-    setSelectedCategory(null);
-  };
+  }, [category]);
 
   if (loading) {
     return (
@@ -74,33 +48,14 @@ const BlogListPage = () => {
     );
   }
 
-  // 포스트가 없는 경우
-  if (posts.length === 0) {
+  if (!category) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-4">
-          <div className="mb-6">
-            <BookOpen className="h-24 w-24 text-muted-foreground/50 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              아직 포스트가 없습니다
-            </h1>
-            <p className="text-muted-foreground mb-6">
-              첫 번째 포스트를 작성해보세요!
-            </p>
-          </div>
-          <div className="space-y-4">
-            <Button size="lg" className="w-full" onClick={() => navigate("/")}>
-              홈으로 돌아가기
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full"
-              onClick={() => navigate("/about")}
-            >
-              소개 페이지 보기
-            </Button>
-          </div>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">
+            카테고리를 찾을 수 없습니다
+          </h1>
+          <Button onClick={() => navigate("/blog")}>모든 포스트 보기</Button>
         </div>
       </div>
     );
@@ -108,7 +63,7 @@ const BlogListPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Section */}
+      {/* Category Header */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -117,58 +72,21 @@ const BlogListPage = () => {
       >
         <div className="container mx-auto max-w-6xl">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              블로그
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-2">
+              <FolderOpen className="h-8 w-8 text-primary" />
+              {category}
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              JavaScript, TypeScript, React를 중심으로 한 기술 포스트들을
-              확인해보세요.
+              "{category}" 카테고리의 모든 포스트를 확인해보세요.
             </p>
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
+            <div className="flex flex-wrap justify-center gap-2">
               <Badge variant="outline" className="text-sm">
                 총 {posts.length}개 포스트
               </Badge>
               <Badge variant="outline" className="text-sm">
-                {categories.length}개 카테고리
+                {new Set(posts.map((post) => post.metadata.category)).size}개
+                카테고리
               </Badge>
-              {selectedCategory && (
-                <Badge
-                  variant="default"
-                  className="text-sm flex items-center gap-1"
-                >
-                  {selectedCategory} ({filteredPosts.length}개)
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={clearCategoryFilter}
-                  />
-                </Badge>
-              )}
-            </div>
-
-            {/* 카테고리 필터 */}
-            <div className="flex flex-wrap justify-center gap-2">
-              <Button
-                variant={selectedCategory === null ? "default" : "outline"}
-                size="sm"
-                onClick={clearCategoryFilter}
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                전체
-              </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={
-                    selectedCategory === category ? "default" : "outline"
-                  }
-                  size="sm"
-                  onClick={() =>
-                    navigate(`/category/${encodeURIComponent(category)}`)
-                  }
-                >
-                  {category}
-                </Button>
-              ))}
             </div>
           </div>
         </div>
@@ -177,27 +95,23 @@ const BlogListPage = () => {
       {/* Posts Grid */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          {filteredPosts.length === 0 ? (
+          {posts.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-center py-12"
             >
-              <BookOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+              <FolderOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">
-                {selectedCategory
-                  ? `${selectedCategory} 카테고리에 포스트가 없습니다`
-                  : "포스트가 없습니다"}
+                "{category}" 카테고리에 해당하는 포스트가 없습니다
               </h3>
               <p className="text-muted-foreground mb-6">
-                {selectedCategory
-                  ? "다른 카테고리를 선택해보세요."
-                  : "첫 번째 포스트를 작성해보세요!"}
+                다른 카테고리를 선택하거나 모든 포스트를 확인해보세요.
               </p>
-              {selectedCategory && (
-                <Button onClick={clearCategoryFilter}>전체 포스트 보기</Button>
-              )}
+              <Button onClick={() => navigate("/blog")}>
+                모든 포스트 보기
+              </Button>
             </motion.div>
           ) : (
             <motion.div
@@ -206,7 +120,7 @@ const BlogListPage = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filteredPosts.map((post, index) => (
+              {posts.map((post, index) => (
                 <motion.div
                   key={post.slug}
                   initial={{ opacity: 0, y: 20 }}
@@ -215,7 +129,10 @@ const BlogListPage = () => {
                   whileHover={{ y: -5, scale: 1.02 }}
                   className="group"
                 >
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 flex flex-col">
+                  <Card
+                    className="h-full hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer"
+                    onClick={() => navigate(`/blog/${post.slug}`)}
+                  >
                     <CardHeader className="flex-shrink-0">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline">
@@ -274,4 +191,4 @@ const BlogListPage = () => {
   );
 };
 
-export default BlogListPage;
+export default CategoryPage;

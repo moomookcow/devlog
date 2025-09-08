@@ -53,7 +53,7 @@
 - **컴포넌트**: `PostDetailPage`, `PostContent`, `CommentSection`, `RelatedPosts`
 - **특징**: MDX 렌더링, 코드 하이라이팅, 목차, 공유 기능
 
-### 4. **카테고리 페이지** (`/category/[category]`) - [ ] 미완료
+### 4. **카테고리 페이지** (`/category/[category]`) - [x] 완료
 
 - **기능**: 특정 카테고리 포스트 목록
 - **컴포넌트**: `CategoryPage`, `CategoryHeader`, `PostList`
@@ -199,14 +199,15 @@
 - [x] MDX 설정 및 파일 기반 콘텐츠 시스템
 - [x] Firebase 에러 처리 및 하이브리드 시스템
 - [x] 검색 기능 구현 (SearchPage, SearchBar, SearchResults, useSearch 훅)
+- [x] 카테고리 페이지 구현 (CategoryPage, 카테고리별 포스트 필터링)
 
 ### 🚧 진행 중인 작업
 
-- [ ] 카테고리 페이지 구현
+- [ ] Blog 컴포넌트들 구현
 
 ### 📋 다음 작업 예정
 
-- [ ] 태그 페이지 구현
+- [ ] 태그 페이지 구현 (나중에)
 - [ ] Blog 컴포넌트들 구현 (BlogCard, PostList, CategoryFilter)
 - [ ] 커스텀 훅 구현 (useTheme, usePosts)
 - [ ] 공통 컴포넌트 구현 (LoadingSpinner)
@@ -223,7 +224,7 @@
 
 ### 📈 전체 진행률
 
-**현재 진행률: 80%** (검색 기능 및 핵심 페이지 완료)
+**현재 진행률: 85%** (카테고리 페이지 및 핵심 기능 완료)
 
 ---
 

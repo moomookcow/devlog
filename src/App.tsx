@@ -6,6 +6,7 @@ import PostDetailPage from "./pages/PostDetailPage";
 import SearchPage from "./pages/SearchPage";
 import AboutPage from "./pages/AboutPage";
 import GuestbookPage from "./pages/GuestbookPage";
+import CategoryPage from "./pages/CategoryPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -41,6 +42,14 @@ function App() {
           element={
             <Layout showSidebar={false}>
               <SearchPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/category/:category"
+          element={
+            <Layout showSidebar={false}>
+              <CategoryPage />
             </Layout>
           }
         />
