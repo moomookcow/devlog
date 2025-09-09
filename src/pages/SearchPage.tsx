@@ -4,6 +4,7 @@ import { Filter } from "lucide-react";
 import { motion } from "framer-motion";
 import { SearchBar } from "@/components/common/SearchBar";
 import { SearchResults } from "@/components/common/SearchResults";
+import SEOHead from "@/components/seo/SEOHead";
 import { useSearch } from "@/hooks/useSearch";
 import { getAllPosts } from "@/utils/posts";
 import type { Post } from "@/utils/mdx";
@@ -94,6 +95,21 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="포스트 검색 - Tech Blog"
+        description="원하는 포스트를 빠르게 찾아보세요. 카테고리, 태그, 키워드로 필터링하여 원하는 기술 포스트를 검색할 수 있습니다."
+        keywords={[
+          "검색",
+          "포스트",
+          "기술",
+          "개발",
+          "JavaScript",
+          "TypeScript",
+          "React",
+        ]}
+        url="/search"
+        type="website"
+      />
       <div className="container mx-auto px-4 py-8">
         {/* 헤더 */}
         <motion.div

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import SEOHead from "@/components/seo/SEOHead";
 import {
   Mail,
   Github,
@@ -232,6 +233,13 @@ const GuestbookPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="방명록 - Tech Blog"
+        description="블로그에 대한 피드백, 질문, 또는 단순한 인사까지 자유롭게 남겨주세요! 익명으로도 작성 가능합니다."
+        keywords={["방명록", "피드백", "질문", "연락", "커뮤니티", "개발자"]}
+        url="/guestbook"
+        type="website"
+      />
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}

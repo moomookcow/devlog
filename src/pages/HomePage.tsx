@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import CategoryModal from "@/components/common/CategoryModal";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import PostList from "@/components/blog/PostList";
+import SEOHead from "@/components/seo/SEOHead";
 import { usePosts } from "@/hooks/usePosts";
 import {
   Search,
@@ -88,6 +89,21 @@ const HomePage: React.FC = () => {
   }
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Tech Blog - 개발 지식과 경험을 공유하는 블로그"
+        description="JavaScript, TypeScript, React를 중심으로 한 실무 경험과 학습 내용을 체계적으로 정리하여 개발자 커뮤니티와 지식을 나누는 기술 블로그입니다."
+        keywords={[
+          "개발",
+          "프로그래밍",
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "웹개발",
+          "기술블로그",
+        ]}
+        url="/"
+        type="website"
+      />
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}

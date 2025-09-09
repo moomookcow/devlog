@@ -9,6 +9,7 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TableOfContents from "@/components/TableOfContents";
+import SEOHead from "@/components/seo/SEOHead";
 import { getPostBySlug, getRelatedPosts } from "@/utils/posts";
 import {
   getPostStats,
@@ -230,6 +231,22 @@ const PostDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={`${post.metadata.title} - Tech Blog`}
+        description={post.metadata.excerpt}
+        keywords={post.metadata.tags}
+        author={post.metadata.author}
+        publishedAt={post.metadata.publishedAt}
+        category={post.metadata.category}
+        tags={post.metadata.tags}
+        readingTime={post.metadata.readingTime}
+        viewCount={postStats?.viewCount || post.metadata.viewCount}
+        likes={postStats?.likes || post.metadata.likes}
+        comments={postStats?.comments?.length || post.metadata.comments}
+        url={`/blog/${post.slug}`}
+        type="article"
+        image="/og-image.jpg"
+      />
       {/* 개발자용 Firebase 연결 상태 인디케이터 */}
       {import.meta.env.DEV && (
         <div className="fixed top-4 right-4 z-50">

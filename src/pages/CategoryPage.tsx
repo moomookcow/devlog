@@ -6,6 +6,7 @@ import type { Post } from "@/utils/mdx";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import PostList from "@/components/blog/PostList";
 import PageHeader from "@/components/blog/PageHeader";
+import SEOHead from "@/components/seo/SEOHead";
 import { FolderOpen } from "lucide-react";
 
 const CategoryPage: React.FC = () => {
@@ -60,6 +61,13 @@ const CategoryPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={`${category} 카테고리 - Tech Blog`}
+        description={`"${category}" 카테고리의 모든 포스트를 확인해보세요. 관련된 기술 포스트들을 한눈에 볼 수 있습니다.`}
+        keywords={[category || "", "카테고리", "기술", "개발", "프로그래밍"]}
+        url={`/category/${category}`}
+        type="website"
+      />
       {/* Category Header */}
       <PageHeader
         title={category}

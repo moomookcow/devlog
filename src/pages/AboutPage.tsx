@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import SEOHead from "@/components/seo/SEOHead";
 import {
   Github,
   Twitter,
@@ -140,6 +141,22 @@ const AboutPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="소개 - moomookcow | Tech Blog"
+        description="JavaScript, TypeScript, React를 중심으로 한 프론트엔드 개발자 moomookcow의 소개 페이지입니다. 기술 스택, 경력, 관심사 등을 확인해보세요."
+        keywords={[
+          "개발자",
+          "프론트엔드",
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "소개",
+          "경력",
+          "기술스택",
+        ]}
+        url="/about"
+        type="website"
+      />
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllPosts } from "@/utils/posts";
 import type { Post } from "@/utils/mdx";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
+import SEOHead from "@/components/seo/SEOHead";
 import {
   BookOpen,
   Filter,
@@ -106,6 +107,21 @@ const BlogListPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="블로그 - Tech Blog"
+        description="JavaScript, TypeScript, React를 중심으로 한 기술 포스트들을 확인해보세요. 실무 경험과 학습 내용을 체계적으로 정리한 개발 블로그입니다."
+        keywords={[
+          "블로그",
+          "개발",
+          "프로그래밍",
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "웹개발",
+        ]}
+        url="/blog"
+        type="website"
+      />
       {/* Header Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
