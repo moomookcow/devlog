@@ -22,7 +22,7 @@ export default function SearchPage() {
     isLoading,
     filters,
     setFilters,
-    clearSearch,
+    // clearSearch,
     searchPosts,
   } = useSearch();
 

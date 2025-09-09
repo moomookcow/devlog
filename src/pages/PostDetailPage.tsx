@@ -247,6 +247,45 @@ const PostDetailPage = () => {
         type="article"
         image="/og-image.jpg"
       />
+
+      {/* 브레드크럼 스키마 */}
+      <script type="application/ld+json">
+        {JSON.stringify(
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "홈",
+                item: "https://tech-blog.moomookcow.dev/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "블로그",
+                item: "https://tech-blog.moomookcow.dev/blog",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: post.metadata.category,
+                item: `https://tech-blog.moomookcow.dev/category/${post.metadata.category.toLowerCase()}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 4,
+                name: post.metadata.title,
+                item: `https://tech-blog.moomookcow.dev/blog/${post.slug}`,
+              },
+            ],
+          },
+          null,
+          2
+        )}
+      </script>
+
       {/* 개발자용 Firebase 연결 상태 인디케이터 */}
       {import.meta.env.DEV && (
         <div className="fixed top-4 right-4 z-50">

@@ -29,8 +29,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   images,
   className,
   showThumbnails = true,
-  autoPlay = false,
-  autoPlayInterval = 5000,
+  // autoPlay = false,
+  // autoPlayInterval = 5000,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);

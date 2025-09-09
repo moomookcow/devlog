@@ -64,46 +64,91 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   ].join(", ");
 
   // 구조화된 데이터 생성
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": type === "article" ? "BlogPosting" : "WebSite",
-    name: title,
-    description,
-    url: fullUrl,
-    image: fullImage,
-    author: {
-      "@type": "Person",
-      name: author,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: siteName,
-      url: siteUrl,
-    },
-    ...(type === "article" && {
-      datePublished: publishedAt,
-      dateModified: updatedAt || publishedAt,
-      mainEntityOfPage: {
-        "@type": "WebPage",
-        "@id": fullUrl,
-      },
-      ...(category && {
-        articleSection: category,
-      }),
-      ...(tags.length > 0 && {
-        keywords: tags.join(", "),
-      }),
-      ...(readingTime && {
-        timeRequired: `PT${readingTime}M`,
-      }),
-      ...(viewCount && {
-        interactionStatistic: {
-          "@type": "InteractionCounter",
-          interactionType: "https://schema.org/ReadAction",
-          userInteractionCount: viewCount,
+  const getStructuredData = () => {
+    if (type === "article") {
+      return {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description,
+        url: fullUrl,
+        image: fullImage,
+        author: {
+          "@type": "Person",
+          name: author,
+          url: siteUrl,
         },
-      }),
-    }),
+        publisher: {
+          "@type": "Organization",
+          name: siteName,
+          url: siteUrl,
+          logo: {
+            "@type": "ImageObject",
+            url: `${siteUrl}/logo.png`,
+          },
+        },
+        datePublished: publishedAt,
+        dateModified: updatedAt || publishedAt,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": fullUrl,
+        },
+        articleSection: category,
+        keywords: tags?.join(", "),
+        timeRequired: readingTime ? `PT${readingTime}M` : undefined,
+        inLanguage: "ko-KR",
+        ...(viewCount && {
+          interactionStatistic: {
+            "@type": "InteractionCounter",
+            interactionType: "https://schema.org/ReadAction",
+            userInteractionCount: viewCount,
+          },
+        }),
+        ...(likes && {
+          interactionStatistic: [
+            {
+              "@type": "InteractionCounter",
+              interactionType: "https://schema.org/LikeAction",
+              userInteractionCount: likes,
+            },
+            ...(comments
+              ? [
+                  {
+                    "@type": "InteractionCounter",
+                    interactionType: "https://schema.org/CommentAction",
+                    userInteractionCount: comments,
+                  },
+                ]
+              : []),
+          ],
+        }),
+      };
+    } else {
+      return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: title,
+        description,
+        url: fullUrl,
+        image: fullImage,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+        publisher: {
+          "@type": "Person",
+          name: author,
+          url: siteUrl,
+        },
+        inLanguage: "ko-KR",
+        copyrightYear: new Date().getFullYear(),
+        dateModified: new Date().toISOString(),
+      };
+    }
   };
 
   return (
@@ -152,8 +197,78 @@ const SEOHead: React.FC<SEOHeadProps> = ({
 
       {/* 구조화된 데이터 */}
       <script type="application/ld+json">
-        {JSON.stringify(structuredData, null, 2)}
+        {JSON.stringify(getStructuredData(), null, 2)}
       </script>
+
+      {/* 추가 구조화된 데이터 */}
+      {type === "website" && (
+        <script type="application/ld+json">
+          {JSON.stringify(
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Tech Blog",
+              description: "개발 지식과 경험을 공유하는 기술 블로그",
+              url: "https://tech-blog.moomookcow.dev",
+              logo: "https://tech-blog.moomookcow.dev/logo.png",
+              founder: {
+                "@type": "Person",
+                name: "moomookcow",
+                url: "https://tech-blog.moomookcow.dev",
+              },
+              sameAs: [
+                "https://github.com/moomookcow",
+                "https://twitter.com/moomookcow",
+              ],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                email: "moomookcow@example.com",
+              },
+            },
+            null,
+            2
+          )}
+        </script>
+      )}
+
+      {type === "article" && (
+        <script type="application/ld+json">
+          {JSON.stringify(
+            {
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "moomookcow",
+              description:
+                "JavaScript, TypeScript, React를 중심으로 한 프론트엔드 개발자",
+              url: "https://tech-blog.moomookcow.dev",
+              jobTitle: "Frontend Developer",
+              worksFor: {
+                "@type": "Organization",
+                name: "Tech Blog",
+              },
+              knowsAbout: [
+                "JavaScript",
+                "TypeScript",
+                "React",
+                "Frontend Development",
+                "Web Development",
+              ],
+              sameAs: [
+                "https://github.com/moomookcow",
+                "https://twitter.com/moomookcow",
+              ],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "email",
+                email: "moomookcow@example.com",
+              },
+            },
+            null,
+            2
+          )}
+        </script>
+      )}
 
       {/* 파비콘 */}
       <link rel="icon" type="image/x-icon" href="/favicon.ico" />

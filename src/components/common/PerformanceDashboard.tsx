@@ -7,7 +7,7 @@ import {
   Wifi,
   MemoryStick,
   TrendingUp,
-  TrendingDown,
+  // TrendingDown,
   Minus,
   X,
   RefreshCw,
@@ -33,7 +33,7 @@ const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
   refreshInterval = 10000,
 }) => {
   const [isExpanded, setIsExpanded] = useState(showDetails);
-  const [isVisible, setIsVisible] = useState(false);
+  // const [isVisible, setIsVisible] = useState(false);
 
   const {
     metrics,
@@ -157,7 +157,7 @@ const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsVisible(false)}
+                onClick={() => setIsExpanded(false)}
                 className="h-8 w-8 p-0"
               >
                 <X className="w-4 h-4" />

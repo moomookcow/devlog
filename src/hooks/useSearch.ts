@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import type { Post } from "@/utils/mdx";
 
 export interface SearchResult {
