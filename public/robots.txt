@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tech-blog.moomookcow.dev/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
