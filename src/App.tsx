@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
 import { PageLoadingFallback } from "@/components/common/LazyComponent";
 
@@ -16,100 +17,102 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <HomePage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/blog"
-          element={
-            <Layout showSidebar={true}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <BlogListPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/blog/:slug"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <PostDetailPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/search"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <SearchPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/category/:category"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <CategoryPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/about"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <AboutPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/guestbook"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <GuestbookPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="/image-test"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <ImageTestPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <Layout showSidebar={false}>
-              <Suspense fallback={<PageLoadingFallback />}>
-                <NotFoundPage />
-              </Suspense>
-            </Layout>
-          }
-        />
-      </Routes>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <HomePage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/blog"
+            element={
+              <Layout showSidebar={true}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <BlogListPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/blog/:slug"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <PostDetailPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <SearchPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/category/:category"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <CategoryPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <AboutPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/guestbook"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <GuestbookPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/image-test"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <ImageTestPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <NotFoundPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+        </Routes>
+      </Router>
+    </HelmetProvider>
   );
 }
 
