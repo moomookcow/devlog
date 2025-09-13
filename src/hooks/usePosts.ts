@@ -178,7 +178,11 @@ export const usePosts = (options: UsePostsOptions = {}): UsePostsReturn => {
 
   const tags = useMemo(() => {
     const allTags = posts.flatMap((post) => post.metadata.tags);
-    return Array.from(new Set(allTags)).sort();
+    // 중복 제거 및 빈 문자열 필터링
+    const uniqueTags = Array.from(new Set(allTags))
+      .filter((tag) => tag && tag.trim() !== "")
+      .sort();
+    return uniqueTags;
   }, [posts]);
 
   return {

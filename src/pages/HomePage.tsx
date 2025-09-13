@@ -16,6 +16,7 @@ import {
   Calendar,
   Clock,
   Eye,
+  Folder,
 } from "lucide-react";
 
 const HomePage: React.FC = () => {
@@ -184,18 +185,26 @@ const HomePage: React.FC = () => {
                           <Badge variant="default" className="text-sm">
                             Featured
                           </Badge>
-                          <Badge variant="secondary">
+                          <Badge
+                            variant="outline"
+                            className="flex items-center gap-1"
+                          >
+                            <Folder className="h-3 w-3" />
                             {featuredPost.metadata.category}
                           </Badge>
-                          {featuredPost.metadata.tags.map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="outline"
-                              className="text-xs"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
+                          {featuredPost.metadata.tags
+                            .filter((tag) => tag && tag.trim() !== "")
+                            .map((tag) => tag.trim())
+                            .slice(0, 3)
+                            .map((tag) => (
+                              <Badge
+                                key={tag}
+                                variant="secondary"
+                                className="text-xs"
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
                         </div>
                         <CardTitle className="text-3xl group-hover:text-primary transition-colors">
                           {featuredPost.metadata.title}

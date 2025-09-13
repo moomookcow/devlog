@@ -136,12 +136,20 @@ export function SearchResults({
                 {result.post.metadata.tags &&
                   result.post.metadata.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-3">
-                      {result.post.metadata.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          <Tag className="h-3 w-3 mr-1" />
-                          {tag}
-                        </Badge>
-                      ))}
+                      {result.post.metadata.tags
+                        .filter((tag) => tag && tag.trim() !== "")
+                        .map((tag) => tag.trim())
+                        .slice(0, 5)
+                        .map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            <Tag className="h-3 w-3 mr-1" />
+                            {tag}
+                          </Badge>
+                        ))}
                     </div>
                   )}
 

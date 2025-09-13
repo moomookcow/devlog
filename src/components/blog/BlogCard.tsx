@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Post } from "@/utils/mdx";
-import { ArrowRight, Calendar, Clock, Eye } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Eye, Folder } from "lucide-react";
 
 interface BlogCardProps {
   post: Post;
@@ -38,6 +38,18 @@ const BlogCard: React.FC<BlogCardProps> = ({
     if (onTagClick) {
       onTagClick(tag);
     }
+  };
+
+  // 태그 중복 제거 및 정리
+  const getCleanTags = () => {
+    if (!post.metadata.tags) return [];
+
+    const uniqueTags = Array.from(new Set(post.metadata.tags))
+      .filter((tag) => tag && tag.trim() !== "")
+      .map((tag) => tag.trim())
+      .slice(0, maxTags);
+
+    return uniqueTags;
   };
 
   const getCardClasses = () => {
@@ -87,9 +99,12 @@ const BlogCard: React.FC<BlogCardProps> = ({
       <Card className={getCardClasses()} onClick={handleCardClick}>
         <CardHeader className="flex-shrink-0">
           <div className="flex items-center gap-2 mb-2">
-            <Badge variant="outline">{post.metadata.category}</Badge>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Folder className="h-3 w-3" />
+              {post.metadata.category}
+            </Badge>
             {showTags &&
-              post.metadata.tags.slice(0, maxTags).map((tag) => (
+              getCleanTags().map((tag) => (
                 <Badge
                   key={tag}
                   variant="secondary"

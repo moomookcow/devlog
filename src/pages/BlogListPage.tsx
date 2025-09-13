@@ -15,6 +15,7 @@ import {
   Clock,
   Eye,
   ArrowRight,
+  Folder,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -232,18 +233,26 @@ const BlogListPage = () => {
                   <Card className="h-full hover:shadow-lg transition-all duration-300 flex flex-col">
                     <CardHeader className="flex-shrink-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline">
+                        <Badge
+                          variant="outline"
+                          className="flex items-center gap-1"
+                        >
+                          <Folder className="h-3 w-3" />
                           {post.metadata.category}
                         </Badge>
-                        {post.metadata.tags.slice(0, 2).map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
+                        {post.metadata.tags
+                          .filter((tag) => tag && tag.trim() !== "")
+                          .map((tag) => tag.trim())
+                          .slice(0, 2)
+                          .map((tag) => (
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-xs"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
                       </div>
                       <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
                         {post.metadata.title}

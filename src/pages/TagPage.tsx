@@ -10,13 +10,14 @@ import PostList from "@/components/blog/PostList";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import SEOHead from "@/components/seo/SEOHead";
 import { usePosts } from "@/hooks/usePosts";
+import type { Post } from "@/utils/mdx";
 
 const TagPage = () => {
   const { tag } = useParams<{ tag: string }>();
   const navigate = useNavigate();
   const { posts, loading, getPostsByTag } = usePosts();
-  const [tagPosts, setTagPosts] = useState<any[]>([]);
-  const [allTags, setAllTags] = useState<string[]>([]);
+  const [tagPosts, setTagPosts] = useState<Post[]>([]);
+  const [allTags, setAllTags] = useState<{ name: string; count: number }[]>([]);
 
   useEffect(() => {
     if (tag) {
@@ -27,14 +28,24 @@ const TagPage = () => {
   }, [tag, getPostsByTag]);
 
   useEffect(() => {
-    // 모든 태그 수집
-    const tagsSet = new Set<string>();
+    // 모든 태그 수집 (중복 제거, 빈 문자열 필터링, 개수 계산)
+    const tagCountMap = new Map<string, number>();
     posts.forEach((post) => {
       if (post.metadata.tags) {
-        post.metadata.tags.forEach((tag: string) => tagsSet.add(tag));
+        post.metadata.tags.forEach((tag: string) => {
+          if (tag && tag.trim() !== "") {
+            const trimmedTag = tag.trim();
+            tagCountMap.set(trimmedTag, (tagCountMap.get(trimmedTag) || 0) + 1);
+          }
+        });
       }
     });
-    setAllTags(Array.from(tagsSet).sort());
+
+    const tagsWithCount = Array.from(tagCountMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count); // 개수 순으로 정렬
+
+    setAllTags(tagsWithCount);
   }, [posts]);
 
   const handleTagClick = (clickedTag: string) => {
@@ -106,18 +117,18 @@ const TagPage = () => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {allTags.map((tagName) => (
+                {allTags.map((tag) => (
                   <Badge
-                    key={tagName}
-                    variant={tagName === decodedTag ? "default" : "secondary"}
+                    key={tag.name}
+                    variant={tag.name === decodedTag ? "default" : "secondary"}
                     className={`cursor-pointer transition-all hover:scale-105 ${
-                      tagName === decodedTag
+                      tag.name === decodedTag
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-primary hover:text-primary-foreground"
                     }`}
-                    onClick={() => handleTagClick(tagName)}
+                    onClick={() => handleTagClick(tag.name)}
                   >
-                    {tagName}
+                    {tag.name} ({tag.count})
                   </Badge>
                 ))}
               </div>

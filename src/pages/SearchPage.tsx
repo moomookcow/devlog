@@ -90,7 +90,12 @@ export default function SearchPage() {
   ).sort();
 
   const availableTags = Array.from(
-    new Set(posts.flatMap((post) => post.metadata.tags || []))
+    new Set(
+      posts
+        .flatMap((post) => post.metadata.tags || [])
+        .filter((tag) => tag && tag.trim() !== "")
+        .map((tag) => tag.trim())
+    )
   ).sort();
 
   return (
