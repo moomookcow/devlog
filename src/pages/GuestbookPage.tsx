@@ -245,15 +245,23 @@ const GuestbookPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="py-20 px-4 bg-gradient-to-br from-primary/5 to-accent/5"
+        className="py-20 px-4 bg-pattern dark:bg-pattern-dark relative overflow-hidden"
       >
-        <div className="container mx-auto max-w-4xl">
+        {/* 배경 장식 요소 */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-br from-blue-400/10 to-emerald-400/10 rounded-full blur-3xl animate-float"></div>
+          <div
+            className="absolute -bottom-20 -right-20 w-60 h-60 bg-gradient-to-br from-emerald-400/10 to-blue-400/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "2s" }}
+          ></div>
+        </div>
+        <div className="container mx-auto max-w-4xl relative z-10">
           <div className="text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-24 h-24 mx-auto mb-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center"
+              className="w-24 h-24 mx-auto mb-8 rounded-full brand-gradient-bg flex items-center justify-center shadow-lg"
             >
               <MessageCircle className="h-12 w-12 text-white" />
             </motion.div>
@@ -261,7 +269,7 @@ const GuestbookPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+              className="text-4xl md:text-5xl font-bold text-gradient mb-4"
             >
               방명록
             </motion.h1>
@@ -280,11 +288,17 @@ const GuestbookPage = () => {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex flex-wrap justify-center gap-2"
             >
-              <Badge variant="outline" className="text-sm">
+              <Badge
+                variant="outline"
+                className="text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700"
+              >
                 <User className="mr-1 h-3 w-3" />
                 익명 가능
               </Badge>
-              <Badge variant="outline" className="text-sm">
+              <Badge
+                variant="outline"
+                className="text-sm bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700"
+              >
                 <Globe className="mr-1 h-3 w-3" />
                 공개/비공개 선택
               </Badge>
@@ -303,9 +317,9 @@ const GuestbookPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card>
+              <Card className="card-unique hover-lift-unique">
                 <CardHeader>
-                  <CardTitle>방명록 남기기</CardTitle>
+                  <CardTitle className="text-gradient">방명록 남기기</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -350,7 +364,7 @@ const GuestbookPage = () => {
                       비공개: 블로그 주인만 볼 수 있습니다
                     </div>
                   </div>
-                  <Button className="w-full">
+                  <Button className="w-full btn-unique">
                     <Send className="mr-2 h-4 w-4" />
                     방명록 남기기
                   </Button>
@@ -366,9 +380,9 @@ const GuestbookPage = () => {
               className="space-y-6"
             >
               {/* Comments */}
-              <Card>
+              <Card className="card-unique">
                 <CardHeader>
-                  <CardTitle>방명록</CardTitle>
+                  <CardTitle className="text-gradient">방명록</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {comments.map((comment, index) => (
@@ -377,12 +391,12 @@ const GuestbookPage = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
-                      className="p-4 rounded-lg bg-muted/30 border"
+                      className="p-4 rounded-lg bg-background/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 group"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <User className="h-4 w-4 text-primary" />
+                          <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                            <User className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                           </div>
                           <div>
                             <h4 className="font-medium text-foreground text-sm">
@@ -395,9 +409,9 @@ const GuestbookPage = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           {comment.isPublic ? (
-                            <Globe className="h-3 w-3 text-green-500" />
+                            <Globe className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                           ) : (
-                            <Lock className="h-3 w-3 text-orange-500" />
+                            <Lock className="h-3 w-3 text-gray-600 dark:text-gray-400" />
                           )}
                         </div>
                       </div>
@@ -405,11 +419,11 @@ const GuestbookPage = () => {
                         {comment.content}
                       </p>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <button className="flex items-center gap-1 hover:text-foreground transition-colors">
+                        <button className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
                           <ThumbsUp className="h-3 w-3" />
                           {comment.likes}
                         </button>
-                        <button className="flex items-center gap-1 hover:text-foreground transition-colors">
+                        <button className="flex items-center gap-1 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors duration-300">
                           <Reply className="h-3 w-3" />
                           {comment.replies}
                         </button>
@@ -417,15 +431,15 @@ const GuestbookPage = () => {
 
                       {/* 댓글 표시 */}
                       {comment.comments && comment.comments.length > 0 && (
-                        <div className="mt-4 pl-4 border-l-2 border-muted">
+                        <div className="mt-4 pl-4 border-l-2 border-blue-200 dark:border-blue-700">
                           <div className="space-y-3">
                             {comment.comments.map((reply) => (
                               <div
                                 key={reply.id}
                                 className="flex items-start gap-3"
                               >
-                                <div className="w-6 h-6 rounded-full bg-muted/50 flex items-center justify-center flex-shrink-0">
-                                  <User className="h-3 w-3 text-muted-foreground" />
+                                <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
+                                  <User className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                                 </div>
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-1">
@@ -435,7 +449,7 @@ const GuestbookPage = () => {
                                     {reply.isOwner && (
                                       <Badge
                                         variant="secondary"
-                                        className="text-xs px-1 py-0"
+                                        className="text-xs px-1 py-0 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700"
                                       >
                                         작성자
                                       </Badge>
@@ -448,7 +462,7 @@ const GuestbookPage = () => {
                                     {reply.content}
                                   </p>
                                   <div className="flex items-center gap-2">
-                                    <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                                    <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors duration-300">
                                       <ThumbsUp className="h-3 w-3" />
                                       {reply.likes}
                                     </button>
@@ -465,9 +479,9 @@ const GuestbookPage = () => {
               </Card>
 
               {/* Contact Details */}
-              <Card>
+              <Card className="card-unique">
                 <CardHeader>
-                  <CardTitle>연락처 정보</CardTitle>
+                  <CardTitle className="text-gradient">연락처 정보</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-4">
@@ -487,10 +501,10 @@ const GuestbookPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
                         whileHover={{ scale: 1.05 }}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors group"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-background/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 group"
                       >
-                        <info.icon className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                        <info.icon className="h-4 w-4 text-blue-600 dark:text-blue-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300" />
+                        <span className="text-sm font-medium text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                           {info.title}
                         </span>
                       </motion.a>

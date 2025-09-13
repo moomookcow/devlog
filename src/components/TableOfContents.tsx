@@ -58,7 +58,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ className }) => {
   // 스크롤 시 활성 섹션 감지
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100; // 헤더 높이 고려
+      // 헤더 높이를 동적으로 계산
+      const header = document.querySelector("header");
+      const headerHeight = header ? header.offsetHeight : 64;
+
+      const scrollPosition = window.scrollY + headerHeight + 20; // 헤더 높이 + 여백 고려
 
       for (let i = tocItems.length - 1; i >= 0; i--) {
         const element = document.getElementById(tocItems[i].id);
@@ -77,8 +81,23 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ className }) => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      const headerHeight = 80; // 헤더 높이
-      const elementPosition = element.offsetTop - headerHeight;
+      // 헤더 높이를 동적으로 계산
+      const header = document.querySelector("header");
+      const headerHeight = header ? header.offsetHeight : 64;
+
+      // getBoundingClientRect를 사용해서 더 정확한 위치 계산
+      const rect = element.getBoundingClientRect();
+      const elementPosition = window.scrollY + rect.top - headerHeight - 20;
+
+      console.log("Scroll Debug:", {
+        elementId: id,
+        elementOffsetTop: element.offsetTop,
+        rectTop: rect.top,
+        windowScrollY: window.scrollY,
+        headerHeight: headerHeight,
+        calculatedPosition: elementPosition,
+        currentScrollY: window.scrollY,
+      });
 
       window.scrollTo({
         top: elementPosition,
@@ -97,9 +116,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ className }) => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto",
-        "bg-background/80 backdrop-blur-sm border rounded-lg p-4",
-        "shadow-sm w-full min-w-0", // 가로 스크롤 방지
+        "bg-background/95 backdrop-blur-md border rounded-lg p-4",
+        "shadow-lg w-full min-w-0", // 가로 스크롤 방지
         className
       )}
     >

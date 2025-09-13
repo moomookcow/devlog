@@ -35,19 +35,22 @@ const Footer: React.FC = () => {
       name: "GitHub",
       href: "https://github.com/moomookcow",
       icon: Github,
-      color: "hover:text-gray-900 dark:hover:text-gray-100",
+      color:
+        "hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800",
     },
     {
       name: "Twitter",
       href: "https://twitter.com/moomookcow",
       icon: Twitter,
-      color: "hover:text-blue-400",
+      color:
+        "hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20",
     },
     {
       name: "Email",
       href: "mailto:moomookcow@example.com",
       icon: Mail,
-      color: "hover:text-red-400",
+      color:
+        "hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20",
     },
   ];
 
@@ -56,21 +59,27 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-muted/50 border-t">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="bg-pattern dark:bg-pattern-dark border-t relative overflow-hidden">
+      {/* 배경 장식 요소 */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-br from-blue-400/5 to-emerald-400/5 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-gradient-to-br from-emerald-400/5 to-blue-400/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
             className="space-y-4"
           >
-            <div className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="flex items-center space-x-3 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl brand-gradient-bg text-white shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:animate-glow">
                 <BookOpen className="h-5 w-5" />
               </div>
-              <span className="text-xl font-bold text-foreground">
+              <span className="text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
                 Tech Blog
               </span>
             </div>
@@ -87,7 +96,7 @@ const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.9 }}
-                  className={`p-2 rounded-md bg-background text-muted-foreground transition-colors ${link.color}`}
+                  className={`p-2 rounded-lg bg-background/50 backdrop-blur-sm text-muted-foreground transition-all duration-300 ${link.color}`}
                   aria-label={link.name}
                 >
                   <link.icon className="h-4 w-4" />
@@ -103,14 +112,14 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-foreground">빠른 링크</h3>
+            <h3 className="text-lg font-semibold text-gradient">빠른 링크</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <motion.a
                     href={link.href}
                     whileHover={{ x: 5 }}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 hover:font-medium"
                   >
                     {link.name}
                   </motion.a>
@@ -126,14 +135,14 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-foreground">카테고리</h3>
+            <h3 className="text-lg font-semibold text-gradient">카테고리</h3>
             <ul className="space-y-2">
               {categories.map((category) => (
                 <li key={category.name}>
                   <motion.a
                     href={category.href}
                     whileHover={{ x: 5 }}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors duration-300 hover:font-medium"
                   >
                     {category.name}
                   </motion.a>
@@ -149,7 +158,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-foreground">
+            <h3 className="text-lg font-semibold text-gradient">
               뉴스레터 구독
             </h3>
             <p className="text-sm text-muted-foreground">
@@ -159,9 +168,9 @@ const Footer: React.FC = () => {
               <input
                 type="email"
                 placeholder="이메일 주소"
-                className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
               />
-              <Button size="sm" className="w-full">
+              <Button size="sm" className="w-full btn-unique">
                 구독하기
               </Button>
             </div>
@@ -190,12 +199,12 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-              <Code className="h-3 w-3" />
+            <div className="flex items-center space-x-2 text-xs text-muted-foreground bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-md">
+              <Code className="h-3 w-3 text-blue-600 dark:text-blue-400" />
               <span>Built with React + TypeScript</span>
             </div>
-            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-              <Zap className="h-3 w-3" />
+            <div className="flex items-center space-x-2 text-xs text-muted-foreground bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-md">
+              <Zap className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
               <span>Powered by Vite</span>
             </div>
           </div>
@@ -205,7 +214,7 @@ const Footer: React.FC = () => {
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.9 }}
             onClick={scrollToTop}
-            className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="btn-unique p-2 rounded-lg"
             aria-label="맨 위로"
           >
             <ArrowUp className="h-4 w-4" />

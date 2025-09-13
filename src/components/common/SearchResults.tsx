@@ -11,6 +11,7 @@ interface SearchResultsProps {
   isLoading: boolean;
   query: string;
   onPostClick: (slug: string) => void;
+  onTagClick?: (tag: string) => void;
 }
 
 export function SearchResults({
@@ -18,6 +19,7 @@ export function SearchResults({
   isLoading,
   query,
   onPostClick,
+  onTagClick,
 }: SearchResultsProps) {
   if (isLoading) {
     return (
@@ -144,7 +146,14 @@ export function SearchResults({
                           <Badge
                             key={tag}
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (onTagClick) {
+                                onTagClick(tag);
+                              }
+                            }}
                           >
                             <Tag className="h-3 w-3 mr-1" />
                             {tag}

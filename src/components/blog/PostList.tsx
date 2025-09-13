@@ -33,7 +33,7 @@ const PostList: React.FC<PostListProps> = ({
       case "compact":
         return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4";
       default:
-        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
+        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
     }
   };
 
@@ -56,9 +56,9 @@ const PostList: React.FC<PostListProps> = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
+      transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
       className={`${getGridClasses()} ${className}`}
     >
       {posts.map((post, index) => (

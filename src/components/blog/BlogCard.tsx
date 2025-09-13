@@ -54,11 +54,11 @@ const BlogCard: React.FC<BlogCardProps> = ({
 
   const getCardClasses = () => {
     const baseClasses =
-      "h-full hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer";
+      "h-full card-unique hover-lift-unique flex flex-col cursor-pointer group";
 
     switch (variant) {
       case "featured":
-        return `${baseClasses} border-2 border-primary/20`;
+        return `${baseClasses} border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50/50 to-emerald-50/50 dark:from-blue-950/50 dark:to-emerald-950/50`;
       case "compact":
         return `${baseClasses} hover:scale-[1.02]`;
       default:
@@ -69,11 +69,11 @@ const BlogCard: React.FC<BlogCardProps> = ({
   const getTitleClasses = () => {
     switch (variant) {
       case "featured":
-        return "text-3xl group-hover:text-primary transition-colors";
+        return "text-3xl group-hover:text-gradient transition-all duration-500 font-bold leading-tight";
       case "compact":
-        return "text-lg group-hover:text-primary transition-colors line-clamp-2";
+        return "text-lg group-hover:text-gradient transition-all duration-500 line-clamp-2 font-semibold";
       default:
-        return "text-xl group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]";
+        return "text-xl group-hover:text-gradient transition-all duration-500 line-clamp-2 min-h-[3.5rem] font-semibold";
     }
   };
 
@@ -152,11 +152,11 @@ const BlogCard: React.FC<BlogCardProps> = ({
             </div>
           </div>
           <Button
-            className="w-full group-hover:bg-primary/90 transition-colors flex-shrink-0"
+            className="w-full btn-unique flex-shrink-0 group-hover:scale-105 transition-all duration-300 cursor-pointer"
             onClick={handleCardClick}
           >
             읽어보기
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
         </CardContent>
       </Card>

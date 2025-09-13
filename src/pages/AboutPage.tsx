@@ -162,15 +162,23 @@ const AboutPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="py-20 px-4 bg-gradient-to-br from-primary/5 to-accent/5"
+        className="py-20 px-4 bg-pattern dark:bg-pattern-dark relative overflow-hidden"
       >
-        <div className="container mx-auto max-w-4xl">
+        {/* 배경 장식 요소 */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-br from-blue-400/10 to-emerald-400/10 rounded-full blur-3xl animate-float"></div>
+          <div
+            className="absolute -bottom-20 -right-20 w-60 h-60 bg-gradient-to-br from-emerald-400/10 to-blue-400/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "2s" }}
+          ></div>
+        </div>
+        <div className="container mx-auto max-w-4xl relative z-10">
           <div className="text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center"
+              className="w-32 h-32 mx-auto mb-8 rounded-full brand-gradient-bg flex items-center justify-center shadow-lg"
             >
               <Code className="h-16 w-16 text-white" />
             </motion.div>
@@ -178,7 +186,7 @@ const AboutPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+              className="text-4xl md:text-5xl font-bold text-gradient mb-4"
             >
               안녕하세요, moomookcow입니다
             </motion.h1>
@@ -198,15 +206,23 @@ const AboutPage = () => {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex flex-wrap justify-center gap-4"
             >
-              <Button size="lg">
+              <Button size="lg" className="btn-unique">
                 <Github className="mr-2 h-5 w-5" />
                 GitHub
               </Button>
-              <Button variant="outline" size="lg">
+              <Button
+                variant="outline"
+                size="lg"
+                className="btn-outline-unique"
+              >
                 <Twitter className="mr-2 h-5 w-5" />
                 Twitter
               </Button>
-              <Button variant="outline" size="lg">
+              <Button
+                variant="outline"
+                size="lg"
+                className="btn-outline-unique"
+              >
                 <Mail className="mr-2 h-5 w-5" />
                 Contact
               </Button>
@@ -225,10 +241,10 @@ const AboutPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card className="h-full">
+              <Card className="h-full card-unique hover-lift-unique">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BookOpen className="h-5 w-5" />
+                  <CardTitle className="flex items-center gap-2 text-gradient">
+                    <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     소개
                   </CardTitle>
                 </CardHeader>
@@ -262,10 +278,10 @@ const AboutPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Card className="h-full">
+              <Card className="h-full card-unique hover-lift-unique">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5" />
+                  <CardTitle className="flex items-center gap-2 text-gradient">
+                    <Star className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                     기술 스택
                   </CardTitle>
                 </CardHeader>
@@ -280,11 +296,13 @@ const AboutPage = () => {
                         whileHover={{ scale: 1.02, y: -2 }}
                         className="group"
                       >
-                        <div className="p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-200 h-full">
+                        <div className="p-4 rounded-lg bg-background/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 h-full group">
                           <div className="flex items-center gap-3 mb-2">
-                            <span className="text-2xl">{skill.icon}</span>
+                            <span className="text-2xl group-hover:scale-110 transition-transform duration-300">
+                              {skill.icon}
+                            </span>
                             <div className="flex-1">
-                              <h3 className="font-bold text-lg text-foreground">
+                              <h3 className="font-bold text-lg text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                 {skill.name}
                               </h3>
                               <p className="text-sm text-muted-foreground">
@@ -297,7 +315,11 @@ const AboutPage = () => {
                               variant={
                                 skill.level === "주력" ? "default" : "secondary"
                               }
-                              className="text-xs"
+                              className={`text-xs ${
+                                skill.level === "주력"
+                                  ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700"
+                                  : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700"
+                              }`}
                             >
                               {skill.level}
                             </Badge>
@@ -318,10 +340,10 @@ const AboutPage = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-12"
           >
-            <Card>
+            <Card className="card-unique">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-gradient">
+                  <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   개발 여정
                 </CardTitle>
                 <p className="text-muted-foreground">
@@ -344,8 +366,8 @@ const AboutPage = () => {
                       >
                         {/* Milestone Circle */}
                         <div className="flex-shrink-0 relative z-10">
-                          <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-sm">
-                            <span className="text-sm font-bold text-primary-foreground">
+                          <div className="w-12 h-12 rounded-full brand-gradient-bg flex items-center justify-center shadow-lg">
+                            <span className="text-sm font-bold text-white">
                               {exp.year.slice(-2)}
                             </span>
                           </div>
@@ -353,16 +375,19 @@ const AboutPage = () => {
 
                         {/* Content */}
                         <div className="flex-1 pb-4">
-                          <div className="bg-card rounded-lg p-4 border hover:shadow-sm transition-shadow">
+                          <div className="bg-background/50 backdrop-blur-sm rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 group">
                             <div className="flex items-center gap-2 mb-2">
-                              <h3 className="font-semibold text-foreground text-lg">
+                              <h3 className="font-semibold text-foreground text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                 {exp.title}
                               </h3>
-                              <Badge variant="outline" className="text-xs">
+                              <Badge
+                                variant="outline"
+                                className="text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700"
+                              >
                                 {exp.milestone}
                               </Badge>
                             </div>
-                            <p className="text-primary font-medium mb-2">
+                            <p className="text-blue-600 dark:text-blue-400 font-medium mb-2">
                               {exp.company}
                             </p>
                             <p className="text-muted-foreground text-sm">
@@ -385,10 +410,10 @@ const AboutPage = () => {
             transition={{ duration: 0.5, delay: 0.6 }}
             className="mt-12"
           >
-            <Card>
+            <Card className="card-unique">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Heart className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-gradient">
+                  <Heart className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                   관심사 & 취미
                 </CardTitle>
                 <p className="text-muted-foreground">
@@ -411,11 +436,11 @@ const AboutPage = () => {
                         whileHover={{ scale: 1.02, y: -2 }}
                         className="group cursor-pointer"
                       >
-                        <div className="p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-200 text-center">
+                        <div className="p-4 rounded-lg bg-background/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 text-center group">
                           <div className="mb-2">
-                            <IconComponent className="h-6 w-6 mx-auto text-primary" />
+                            <IconComponent className="h-6 w-6 mx-auto text-blue-600 dark:text-blue-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300" />
                           </div>
-                          <h3 className="font-semibold text-sm mb-1 text-foreground">
+                          <h3 className="font-semibold text-sm mb-1 text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                             {interest.name}
                           </h3>
                           <p className="text-xs text-muted-foreground">

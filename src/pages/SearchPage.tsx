@@ -76,6 +76,11 @@ export default function SearchPage() {
     navigate(`/blog/${slug}`);
   };
 
+  // 태그 클릭
+  const handleTagClick = (tag: string) => {
+    navigate(`/tag/${encodeURIComponent(tag)}`);
+  };
+
   // 필터 변경
   const handleFiltersChange = (newFilters: {
     category?: string;
@@ -176,6 +181,7 @@ export default function SearchPage() {
             isLoading={isLoading}
             query={query}
             onPostClick={handlePostClick}
+            onTagClick={handleTagClick}
           />
         </motion.div>
 

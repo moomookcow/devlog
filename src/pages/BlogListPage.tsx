@@ -125,46 +125,77 @@ const BlogListPage = () => {
       />
       {/* Header Section */}
       <motion.section
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="py-16 px-4 bg-gradient-to-br from-primary/5 to-accent/5"
+        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+        className="py-20 px-4 bg-pattern dark:bg-pattern-dark relative overflow-hidden"
       >
-        <div className="container mx-auto max-w-6xl">
+        {/* 배경 장식 요소 */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-emerald-400/20 rounded-full blur-3xl animate-float"></div>
+          <div
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-emerald-400/20 to-blue-400/20 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "1s" }}
+          ></div>
+        </div>
+
+        <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-5xl md:text-6xl font-bold text-gradient mb-6"
+            >
               블로그
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed"
+            >
               JavaScript, TypeScript, React를 중심으로 한 기술 포스트들을
               확인해보세요.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
-              <Badge variant="outline" className="text-sm">
-                총 {posts.length}개 포스트
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-wrap justify-center gap-3 mb-8"
+            >
+              <Badge className="text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-lg">
+                📝 총 {posts.length}개 포스트
               </Badge>
-              <Badge variant="outline" className="text-sm">
-                {categories.length}개 카테고리
+              <Badge className="text-sm bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-0 shadow-lg">
+                📁 {categories.length}개 카테고리
               </Badge>
               {selectedCategory && (
                 <Badge
-                  variant="default"
-                  className="text-sm flex items-center gap-1"
+                  className="text-sm bg-gradient-to-r from-orange-500 to-orange-600 text-white border-0 shadow-lg flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
+                  onClick={clearCategoryFilter}
                 >
                   {selectedCategory} ({filteredPosts.length}개)
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={clearCategoryFilter}
-                  />
+                  <X className="h-3 w-3" />
                 </Badge>
               )}
-            </div>
+            </motion.div>
 
             {/* 카테고리 필터 */}
-            <div className="flex flex-wrap justify-center gap-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="flex flex-wrap justify-center gap-3"
+            >
               <Button
                 variant={selectedCategory === null ? "default" : "outline"}
                 size="sm"
+                className={
+                  selectedCategory === null
+                    ? "btn-unique"
+                    : "btn-outline-unique"
+                }
                 onClick={clearCategoryFilter}
               >
                 <Filter className="h-4 w-4 mr-2" />
@@ -177,6 +208,11 @@ const BlogListPage = () => {
                     selectedCategory === category ? "default" : "outline"
                   }
                   size="sm"
+                  className={
+                    selectedCategory === category
+                      ? "btn-unique"
+                      : "btn-outline-unique"
+                  }
                   onClick={() =>
                     navigate(`/category/${encodeURIComponent(category)}`)
                   }
@@ -184,58 +220,76 @@ const BlogListPage = () => {
                   {category}
                 </Button>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </motion.section>
 
       {/* Posts Grid */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-pattern dark:bg-pattern-dark relative overflow-hidden">
+        {/* 배경 장식 요소 */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 right-20 w-60 h-60 bg-gradient-to-br from-blue-400/10 to-emerald-400/10 rounded-full blur-3xl animate-float"></div>
+          <div
+            className="absolute bottom-20 left-20 w-60 h-60 bg-gradient-to-br from-emerald-400/10 to-blue-400/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "1.5s" }}
+          ></div>
+        </div>
+
+        <div className="container mx-auto max-w-6xl relative z-10">
           {filteredPosts.length === 0 ? (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-center py-12"
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+              className="text-center py-16"
             >
-              <BookOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">
-                {selectedCategory
-                  ? `${selectedCategory} 카테고리에 포스트가 없습니다`
-                  : "포스트가 없습니다"}
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                {selectedCategory
-                  ? "다른 카테고리를 선택해보세요."
-                  : "첫 번째 포스트를 작성해보세요!"}
-              </p>
+              <div className="mb-8">
+                <BookOpen className="h-24 w-24 text-blue-500/50 mx-auto mb-6 animate-float" />
+                <h3 className="text-2xl font-bold text-gradient mb-4">
+                  {selectedCategory
+                    ? `${selectedCategory} 카테고리에 포스트가 없습니다`
+                    : "포스트가 없습니다"}
+                </h3>
+                <p className="text-lg text-muted-foreground mb-8">
+                  {selectedCategory
+                    ? "다른 카테고리를 선택해보세요."
+                    : "첫 번째 포스트를 작성해보세요!"}
+                </p>
+              </div>
               {selectedCategory && (
-                <Button onClick={clearCategoryFilter}>전체 포스트 보기</Button>
+                <Button className="btn-unique" onClick={clearCategoryFilter}>
+                  전체 포스트 보기
+                </Button>
               )}
             </motion.div>
           ) : (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {filteredPosts.map((post, index) => (
                 <motion.div
                   key={post.slug}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  whileHover={{ y: -5, scale: 1.02 }}
+                  transition={{
+                    duration: 0.8,
+                    delay: 0.3 + index * 0.1,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                   className="group"
+                  onClick={() => navigate(`/blog/${post.slug}`)}
                 >
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 flex flex-col">
+                  <Card className="h-full card-unique hover-lift-unique flex flex-col cursor-pointer">
                     <CardHeader className="flex-shrink-0">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-4">
                         <Badge
                           variant="outline"
-                          className="flex items-center gap-1"
+                          className="flex items-center gap-1 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300"
                         >
                           <Folder className="h-3 w-3" />
                           {post.metadata.category}
@@ -248,42 +302,55 @@ const BlogListPage = () => {
                             <Badge
                               key={tag}
                               variant="secondary"
-                              className="text-xs"
+                              className="text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700 cursor-pointer hover:scale-105 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/tag/${encodeURIComponent(tag)}`);
+                              }}
                             >
                               {tag}
                             </Badge>
                           ))}
                       </div>
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
+                      <CardTitle className="text-xl group-hover:text-gradient transition-all duration-500 line-clamp-2 min-h-[3.5rem] font-semibold">
                         {post.metadata.title}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col flex-grow">
-                      <p className="text-muted-foreground mb-4 line-clamp-3 flex-grow min-h-[4.5rem]">
+                      <p className="text-muted-foreground mb-6 line-clamp-3 flex-grow min-h-[4.5rem] leading-relaxed">
                         {post.metadata.excerpt}
                       </p>
-                      <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 flex-shrink-0">
+                      <div className="flex items-center justify-between text-sm mb-6 flex-shrink-0">
                         <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>{post.metadata.publishedAt}</span>
+                          <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
+                            <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            <span className="text-blue-700 dark:text-blue-300 font-medium">
+                              {post.metadata.publishedAt}
+                            </span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{post.metadata.readingTime}분</span>
+                          <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg">
+                            <Clock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                            <span className="text-emerald-700 dark:text-emerald-300 font-medium">
+                              {post.metadata.readingTime}분
+                            </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-4 w-4" />
-                          <span>{post.metadata.viewCount}</span>
+                        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <Eye className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">
+                            {post.metadata.viewCount}
+                          </span>
                         </div>
                       </div>
                       <Button
-                        className="w-full group-hover:bg-primary/90 transition-colors flex-shrink-0"
-                        onClick={() => navigate(`/blog/${post.slug}`)}
+                        className="w-full btn-unique flex-shrink-0 group-hover:scale-105 transition-all duration-300"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/blog/${post.slug}`);
+                        }}
                       >
                         읽어보기
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                       </Button>
                     </CardContent>
                   </Card>

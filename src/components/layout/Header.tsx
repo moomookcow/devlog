@@ -45,8 +45,8 @@ const Header = () => {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 shadow-sm"
       >
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
@@ -54,28 +54,28 @@ const Header = () => {
             <Link to="/">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="flex items-center space-x-2"
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="flex items-center space-x-3 group"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl brand-gradient-bg text-white shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:animate-glow">
                   <BookOpen className="h-5 w-5" />
                 </div>
-                <span className="text-xl font-bold text-foreground">
+                <span className="text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
                   Tech Blog
                 </span>
               </motion.div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center space-x-2">
               {navigation.map((item) => (
                 <motion.div key={item.name}>
                   <Link
                     to={item.href}
-                    className={`flex items-center space-x-1 text-sm font-medium transition-colors ${
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                       location.pathname === item.href
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                     }`}
                   >
                     <item.icon className="h-4 w-4" />
