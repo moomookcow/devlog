@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
 import { PageLoadingFallback } from "@/components/common/LazyComponent";
+import ScrollToTop from "@/components/common/ScrollToTop";
 
 // Lazy load pages for code splitting
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -20,6 +21,7 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route
             path="/"
