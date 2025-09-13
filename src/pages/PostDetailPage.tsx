@@ -39,7 +39,7 @@ const PostDetailPage = () => {
   const [postStats, setPostStats] = React.useState<PostStats | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [relatedPosts, setRelatedPosts] = React.useState<Post[]>([]);
-  const [firebaseConnected, setFirebaseConnected] = React.useState(true);
+  const [firebaseConnected, setFirebaseConnected] = React.useState(false);
 
   React.useEffect(() => {
     const loadPost = async () => {

@@ -43,10 +43,12 @@ export async function getPostStats(
 }
 
 // 조회수 증가 (Firebase 비활성화)
-export async function incrementViewCount(_firebaseId: string): Promise<void> {
+export async function incrementViewCount(firebaseId: string): Promise<void> {
   // Firebase 비활성화 - 조회수 증가 기능 비활성화
   if (isDev) {
-    console.log("조회수 증가 기능 비활성화 (Firebase 비활성화)");
+    console.log(
+      `조회수 증가 기능 비활성화 (Firebase 비활성화) - ${firebaseId}`
+    );
   }
   // 아무것도 하지 않음
 }
@@ -57,6 +59,13 @@ export async function toggleLike(
   userId: string
 ): Promise<{ success: boolean; isLiked: boolean }> {
   try {
+    if (!db) {
+      if (isDev) {
+        console.warn("Firebase not initialized - 좋아요 토글 비활성화");
+      }
+      return { success: false, isLiked: false };
+    }
+
     const docRef = doc(db, POSTS_COLLECTION, firebaseId);
     const docSnap = await getDoc(docRef);
 
@@ -97,6 +106,13 @@ export async function addComment(
   comment: Omit<Comment, "id" | "createdAt">
 ): Promise<{ success: boolean; commentId?: string }> {
   try {
+    if (!db) {
+      if (isDev) {
+        console.warn("Firebase not initialized - 댓글 추가 비활성화");
+      }
+      return { success: false };
+    }
+
     const commentsRef = collection(db, COMMENTS_COLLECTION);
     const newComment = {
       ...comment,
@@ -125,6 +141,13 @@ export async function addComment(
 // 포스트의 댓글 목록 가져오기
 export async function getPostComments(firebaseId: string): Promise<Comment[]> {
   try {
+    if (!db) {
+      if (isDev) {
+        console.warn("Firebase not initialized - 댓글 목록 가져오기 비활성화");
+      }
+      return [];
+    }
+
     const commentsRef = collection(db, COMMENTS_COLLECTION);
     const q = query(
       commentsRef,
@@ -161,6 +184,15 @@ export async function getPopularPosts(
   limitCount: number = 5
 ): Promise<{ firebaseId: string; viewCount: number }[]> {
   try {
+    if (!db) {
+      if (isDev) {
+        console.warn(
+          "Firebase not initialized - 인기 포스트 가져오기 비활성화"
+        );
+      }
+      return [];
+    }
+
     const postsRef = collection(db, POSTS_COLLECTION);
     const q = query(postsRef, orderBy("viewCount", "desc"), limit(limitCount));
 
@@ -189,6 +221,13 @@ export async function getRecentComments(
   limitCount: number = 5
 ): Promise<Comment[]> {
   try {
+    if (!db) {
+      if (isDev) {
+        console.warn("Firebase not initialized - 최근 댓글 가져오기 비활성화");
+      }
+      return [];
+    }
+
     const commentsRef = collection(db, COMMENTS_COLLECTION);
     const q = query(
       commentsRef,
@@ -223,6 +262,13 @@ export async function getRecentComments(
 // 포스트 통계 초기화 (새 포스트 생성 시)
 export async function initializePostStats(firebaseId: string): Promise<void> {
   try {
+    if (!db) {
+      if (isDev) {
+        console.warn("Firebase not initialized - 포스트 통계 초기화 비활성화");
+      }
+      return;
+    }
+
     const docRef = doc(db, POSTS_COLLECTION, firebaseId);
     await updateDoc(docRef, {
       viewCount: 0,
@@ -241,5 +287,5 @@ export async function initializePostStats(firebaseId: string): Promise<void> {
 
 // Firebase 연결 상태 확인 함수
 export function getFirebaseConnectionStatus(): boolean {
-  return isFirebaseConnected;
+  return db !== null && isFirebaseConnected;
 }
