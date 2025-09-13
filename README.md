@@ -25,6 +25,12 @@
 - **백엔드**: Firebase (Firestore, Functions, Hosting)
 - **아이콘**: Lucide React
 
+### 시스템 요구사항
+
+- **Node.js**: 20.0.0 이상 (Firebase AI 패키지 요구사항)
+- **Yarn**: 1.22.0 이상
+- **Git**: 2.0.0 이상
+
 ### 추가 도구
 
 - **코드 하이라이팅**: Prism.js
