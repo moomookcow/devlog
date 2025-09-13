@@ -11,11 +11,12 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TableOfContents from "@/components/TableOfContents";
 import SEOHead from "@/components/seo/SEOHead";
 import { getPostBySlug, getRelatedPosts } from "@/utils/posts";
-import {
-  getPostStats,
-  incrementViewCount,
-  getFirebaseConnectionStatus,
-} from "@/utils/firebase-posts";
+// Firebase 관련 import (기능 미구현으로 비활성화)
+// import {
+//   getPostStats,
+//   incrementViewCount,
+//   getFirebaseConnectionStatus,
+// } from "@/utils/firebase-posts";
 import type { Post, PostStats } from "@/utils/mdx";
 import {
   Calendar,
@@ -39,7 +40,8 @@ const PostDetailPage = () => {
   const [postStats, setPostStats] = React.useState<PostStats | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [relatedPosts, setRelatedPosts] = React.useState<Post[]>([]);
-  const [firebaseConnected, setFirebaseConnected] = React.useState(false);
+  // Firebase 기능 미구현으로 상태 변수 제거
+  // const [firebaseConnected, setFirebaseConnected] = React.useState(false);
 
   React.useEffect(() => {
     const loadPost = async () => {
@@ -61,21 +63,27 @@ const PostDetailPage = () => {
 
         setPost(postData);
 
-        // 2. Firebase 통계 로드 (비활성화 - 기본값만 사용)
-        if (postData.metadata.firebaseId) {
-          const stats = await getPostStats(postData.metadata.firebaseId);
-          setPostStats(stats);
+        // 2. Firebase 통계 로드 (기능 미구현으로 비활성화)
+        // if (postData.metadata.firebaseId) {
+        //   const stats = await getPostStats(postData.metadata.firebaseId);
+        //   setPostStats(stats);
+        //   incrementViewCount(postData.metadata.firebaseId);
+        // }
 
-          // 3. 조회수 증가 (비활성화)
-          incrementViewCount(postData.metadata.firebaseId);
-        }
+        // 기본 통계 설정 (MDX 메타데이터 사용)
+        setPostStats({
+          firebaseId: postData.metadata.firebaseId || postData.slug,
+          viewCount: postData.metadata.viewCount || 0,
+          likes: postData.metadata.likes || 0,
+          comments: [],
+        });
 
-        // 4. 관련 포스트 로드
+        // 3. 관련 포스트 로드
         const related = await getRelatedPosts(postData, 3);
         setRelatedPosts(related);
 
-        // 5. Firebase 연결 상태 확인
-        setFirebaseConnected(getFirebaseConnectionStatus());
+        // 4. Firebase 연결 상태 (기능 미구현으로 비활성화)
+        // setFirebaseConnected(false);
       } catch (error) {
         console.error("Error loading post:", error);
         setPost(null);
@@ -286,25 +294,14 @@ const PostDetailPage = () => {
         )}
       </script>
 
-      {/* 개발자용 Firebase 연결 상태 인디케이터 */}
-      {import.meta.env.DEV && (
+      {/* Firebase 기능 미구현으로 인디케이터 비활성화 */}
+      {/* {import.meta.env.DEV && (
         <div className="fixed top-4 right-4 z-50">
-          <div
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
-              firebaseConnected
-                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-            }`}
-            title={
-              firebaseConnected
-                ? "Firebase 연결됨"
-                : "Firebase 연결 실패 - 기본값 사용 중"
-            }
-          >
-            {firebaseConnected ? "🔥 Firebase" : "⚠️ Firebase"}
+          <div className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+            📝 정적 블로그 모드
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Hero Section */}
       <motion.section
@@ -398,12 +395,13 @@ const PostDetailPage = () => {
                   <div className="prose prose-lg max-w-none dark:prose-invert">
                     <ReactMarkdown
                       components={{
-                        code({ node, className, children, ...props }: any) {
+                        code(props: any) {
+                          const { className, children } = props;
                           const match = /language-(\w+)/.exec(className || "");
                           const inline = !className?.includes("language-");
                           return !inline && match ? (
                             <SyntaxHighlighter
-                              style={oneDark as any}
+                              style={oneDark}
                               language={match[1]}
                               PreTag="div"
                               {...props}
@@ -524,25 +522,19 @@ const PostDetailPage = () => {
 
                   <Separator className="my-8" />
 
-                  {/* Article Actions */}
+                  {/* Article Actions - 정적 정보만 표시 */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-2"
-                      >
+                      <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
                         <Heart className="h-4 w-4" />
-                        {postStats?.likes || post.metadata.likes}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-2"
-                      >
+                        {postStats?.likes || post.metadata.likes} 좋아요
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
                         <MessageCircle className="h-4 w-4" />
-                        {postStats?.comments?.length || post.metadata.comments}
-                      </Button>
+                        {postStats?.comments?.length ||
+                          post.metadata.comments}{" "}
+                        댓글
+                      </div>
                     </div>
                     <Button
                       variant="outline"
