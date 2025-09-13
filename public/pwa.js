@@ -32,3 +32,4 @@ function showInstallPrompt() {
 window.addEventListener("appinstalled", (evt) => {
   console.log("App was installed");
 });
+
