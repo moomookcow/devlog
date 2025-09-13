@@ -12,6 +12,7 @@ const SearchPage = lazy(() => import("./pages/SearchPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const GuestbookPage = lazy(() => import("./pages/GuestbookPage"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
+const TagPage = lazy(() => import("./pages/TagPage"));
 const ImageTestPage = lazy(() => import("./pages/ImageTestPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
@@ -66,6 +67,16 @@ function App() {
               <Layout showSidebar={false}>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <CategoryPage />
+                </Suspense>
+              </Layout>
+            }
+          />
+          <Route
+            path="/tag/:tag"
+            element={
+              <Layout showSidebar={false}>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <TagPage />
                 </Suspense>
               </Layout>
             }
