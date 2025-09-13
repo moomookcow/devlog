@@ -77,7 +77,7 @@ const TagPage = () => {
         description={`${decodedTag} 태그와 관련된 ${tagCount}개의 포스트를 확인해보세요.`}
         keywords={[decodedTag, "태그", "블로그", "기술"]}
       />
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* 페이지 헤더 */}
         <PageHeader
@@ -86,7 +86,7 @@ const TagPage = () => {
           icon={Tag}
           badges={[
             { text: `${tagCount}개 포스트`, variant: "secondary" as const },
-            { text: "태그", variant: "outline" as const }
+            { text: "태그", variant: "outline" as const },
           ]}
         />
 
@@ -132,10 +132,7 @@ const TagPage = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           {tagPosts.length > 0 ? (
-            <PostList
-              posts={tagPosts}
-              onTagClick={handleTagClick}
-            />
+            <PostList posts={tagPosts} onTagClick={handleTagClick} />
           ) : (
             <Card>
               <CardContent className="p-8 text-center">
