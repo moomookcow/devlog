@@ -227,7 +227,27 @@
 
 ### 📈 전체 진행률
 
-**현재 진행률: 98%** (성능 최적화 및 이미지 테스트 완료)
+**현재 진행률: 100%** (Firebase Hosting 배포 완료)
+
+---
+
+## 🌐 배포 정보
+
+### 현재 배포 상태
+
+- **✅ 배포 완료**: Firebase Hosting
+- **🌐 사이트 URL**: https://tech-blog-moomookcow.web.app
+- **📊 Firebase Console**: https://console.firebase.google.com/project/tech-blog-moomookcow/overview
+- **🔄 자동 배포**: GitHub Actions (main 브랜치 푸시 시)
+
+### 커스텀 도메인 설정 (예정)
+
+- **🎯 목표 도메인**: tech-blog.moomookcow.dev
+- **📋 설정 방법**:
+  1. Firebase Console → Hosting → 도메인 추가
+  2. DNS 설정 (A 레코드 또는 CNAME)
+  3. SSL 인증서 자동 발급
+  4. 도메인 연결 완료
 
 ---
 
@@ -267,11 +287,58 @@ yarn dev
 yarn build
 ```
 
-### 5. 미리보기
+### 5. 배포
+
+```bash
+# 수동 배포
+yarn deploy
+
+# 또는 Hosting만 배포
+yarn deploy:hosting
+```
+
+### 6. 미리보기
 
 ```bash
 yarn preview
 ```
+
+### 7. GitHub Actions 자동 배포
+
+```bash
+# main 브랜치에 푸시하면 자동으로 배포됩니다
+git add .
+git commit -m "feat: 새로운 기능 추가"
+git push origin main
+```
+
+#### 자동 배포 설정 방법
+
+1. **Firebase Service Account 키 생성**
+
+   - Firebase Console → 프로젝트 설정 → 서비스 계정
+   - "새 비공개 키 생성" → JSON 파일 다운로드
+
+2. **GitHub Secrets 설정**
+
+   - GitHub 저장소 → Settings → Secrets and variables → Actions
+   - `FIREBASE_SERVICE_ACCOUNT` 이름으로 JSON 내용 추가
+
+3. **자동 배포 활성화**
+
+   ```bash
+   firebase init hosting:github
+   ```
+
+4. **배포 확인**
+   - GitHub Actions 탭에서 배포 진행 상황 확인
+   - https://tech-blog-moomookcow.web.app 접속하여 변경사항 확인
+
+#### 배포 채널
+
+- **Live 채널**: `main` 브랜치 푸시 시 자동 배포
+- **Preview 채널**: Pull Request 생성 시 미리보기 배포
+- **수동 배포**: `yarn deploy` 명령어로 수동 배포
 
 ## 📊 성능 목표
 

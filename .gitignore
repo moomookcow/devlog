@@ -26,3 +26,12 @@ dist-ssr
 # 환경 변수
 .env.local
 .env
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Service Account (보안)
+service-account-key.json
+firebase-adminsdk-*.json
